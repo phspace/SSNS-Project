@@ -21,8 +21,10 @@ public class AcceObserver extends DataObserver {
     public synchronized void update() {
         data = subject.getData();
         extractValue();
-        acceData.add(data);
-        System.out.println("Accelerometer: " + data);
+        if (data.contains("000000000000")) {
+
+        } else {acceData.add(data);
+        System.out.println("Accelerometer: " + data);}
     }
 
     @Override

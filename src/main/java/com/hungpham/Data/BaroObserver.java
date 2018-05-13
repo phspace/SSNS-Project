@@ -20,6 +20,7 @@ public class BaroObserver extends DataObserver {
     @Override
     public synchronized void update() {
         data = subject.getData();
+        extractValue();
         baroData.add(data);
         System.out.println("Barometer: " + data);
     }
@@ -30,6 +31,7 @@ public class BaroObserver extends DataObserver {
     }
 
     public void extractValue() {
-        //String rawValue = data.substring()
+        String rawValue = data.substring(22, 32);
+        data = rawValue;
     }
 }
