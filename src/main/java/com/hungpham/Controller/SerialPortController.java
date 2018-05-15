@@ -1,6 +1,6 @@
 package com.hungpham.Controller;
 
-import com.hungpham.Data.SensorData;
+import com.hungpham.Data.SerialData;
 import com.hungpham.Utils.Utils;
 import gnu.io.*;
 
@@ -28,13 +28,24 @@ public class SerialPortController implements Runnable, SerialPortEventListener {
     }
 
     private void init() {
-        try {
-            portID = CommPortIdentifier.getPortIdentifier("COM3");
-            System.out.println("Serial port: " + portID.getName());
-        } catch (NoSuchPortException e) {
-            e.printStackTrace();
+        String osname = System.getProperty("os.name", "").toLowerCase();
+        String defaultPort = null;
+        if (osname.startsWith("windows")) {
+            // windows
+            defaultPort = "COM3";
+        } else if (osname.startsWith("linux")) {
+            // linux
+            defaultPort = "/dev/ttyS0";
+        } else if (osname.startsWith("mac")) {
+            // mac
+            defaultPort = "/dev/tty.usbmodemL1000051";
+        } else {
+            System.out.println("Sorry, your operating system is not supported");
+            return;
         }
         try {
+            portID = CommPortIdentifier.getPortIdentifier(defaultPort);
+            System.out.println("Serial port: " + portID.getName());
             serialPort = (SerialPort) portID.open("SerialPortController", 2000);
             inputStream = serialPort.getInputStream();
             serialPort.addEventListener(this);
@@ -50,6 +61,8 @@ public class SerialPortController implements Runnable, SerialPortEventListener {
             serialPort.notifyOnParityError(true);
             serialPort.notifyOnRingIndicator(true);
             serialPort.setSerialPortParams(115200, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
+        } catch (NoSuchPortException e) {
+            e.printStackTrace();
         } catch (PortInUseException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -97,7 +110,7 @@ public class SerialPortController implements Runnable, SerialPortEventListener {
                 }
                 data = Utils.bytesToHexString(readBuffer);
                 if (mode == 1) {
-                    SensorData.dataQueue.add(data);
+                    SerialData.dataQueue.add(data);
                 }
                 //System.out.println(data);
             } catch (IOException ioe) {

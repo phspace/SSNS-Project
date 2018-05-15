@@ -3,7 +3,6 @@ package com.hungpham;
 import com.hungpham.Controller.SerialPortController;
 import com.hungpham.Controller.UI;
 import com.hungpham.Data.DataFactory;
-import com.hungpham.Data.SensorData;
 
 public class Main {
 

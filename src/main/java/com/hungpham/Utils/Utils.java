@@ -47,5 +47,11 @@ public class Utils {
         return result;
     }
 
+    public static int hexStringToInt(String hexString) {
+        int result = 0;
+        result = Integer.parseInt(hexString, 16);
+        return result;
+    }
+
 
 }

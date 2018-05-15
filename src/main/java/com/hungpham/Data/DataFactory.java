@@ -3,20 +3,20 @@ package com.hungpham.Data;
 public class DataFactory implements Runnable {
     private AcceObserver acc;
     private BaroObserver bar;
-    private SensorData sensorData;
+    private SerialData serialData;
 
     public DataFactory() {
-        sensorData = new SensorData();
-        acc = new AcceObserver(sensorData);
-        bar = new BaroObserver(sensorData);
+        serialData = new SerialData();
+        acc = new AcceObserver(serialData);
+        bar = new BaroObserver(serialData);
     }
 
     @Override
     public void run() {
         while (true) {
-            while (SensorData.dataQueue.size() != 0) {
-                sensorData.updateData();
-                sensorData.seperateData();
+            while (SerialData.dataQueue.size() != 0) {
+                serialData.updateData();
+                serialData.seperateData();
             }
         }
     }

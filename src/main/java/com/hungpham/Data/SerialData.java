@@ -4,15 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 
-public class SensorData {
+public class SerialData {
     private String acceValue;
     private String baroValue;
     private volatile String rawData;
-    private List<DataObserver> observers = new ArrayList<DataObserver>();
+    private List<SensorsObserver> observers = new ArrayList<SensorsObserver>();
 
     public static volatile LinkedBlockingQueue<String> dataQueue;
 
-    public SensorData() {
+    public SerialData() {
         acceValue = null;
         baroValue = null;
         rawData = null;
@@ -30,12 +30,12 @@ public class SensorData {
         }
     }
 
-    public void attach(DataObserver observer) {
+    public void attach(SensorsObserver observer) {
         observers.add(observer);
     }
 
     public synchronized void notifySpecificObserver(String sensor) {
-        for (DataObserver observer : observers) {
+        for (SensorsObserver observer : observers) {
             if (observer.getName().equalsIgnoreCase(sensor)) {
                 observer.update();
             }

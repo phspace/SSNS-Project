@@ -2,11 +2,11 @@ package com.hungpham.Data;
 
 import java.util.concurrent.LinkedBlockingQueue;
 
-public class BaroObserver extends DataObserver {
+public class BaroObserver extends SensorsObserver {
     private String data;
     public static volatile LinkedBlockingQueue<String> baroData;
 
-    public BaroObserver(SensorData subject) {
+    public BaroObserver(SerialData subject) {
         this.subject = subject;
         this.subject.attach(this);
         this.name = "baro";
