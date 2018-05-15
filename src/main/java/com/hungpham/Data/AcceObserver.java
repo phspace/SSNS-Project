@@ -23,7 +23,7 @@ public class AcceObserver extends SensorsObserver {
     public synchronized void update() {
         data = subject.getData();
         extractValue();
-        if (data.contains("000000000000")) {
+        if (data.contains("000000")) {
 
         } else {acceData.add(data);
 

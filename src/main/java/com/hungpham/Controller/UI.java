@@ -41,7 +41,7 @@ public class UI extends Frame implements ActionListener {
         b1.addActionListener(this);
         add(commandField);
         add(b1);
-        setSize(1200, 1000);
+        setSize(1200, 600);
         setLayout(null);
         setVisible(true);
     }
