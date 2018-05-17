@@ -19,15 +19,14 @@ public class SerialData {
         dataQueue = new LinkedBlockingQueue<String>();
     }
 
-    public synchronized void updateData() {
-        synchronized (dataQueue) {
-            try {
-                rawData = dataQueue.take();
-                //System.out.println("Raw data:" + rawData);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+    public void updateData() {
+        try {
+            rawData = dataQueue.take();
+            //System.out.println("Raw data:" + rawData);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
+
     }
 
     public void attach(SensorsObserver observer) {

@@ -6,7 +6,4 @@ public abstract class SensorsObserver {
     public abstract void update();
     public abstract String getName();
 
-    public void seperate2Hex(String hex) {
-
-    }
 }

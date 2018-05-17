@@ -17,6 +17,7 @@ public class DataFactory implements Runnable {
             while (SerialData.dataQueue.size() != 0) {
                 serialData.updateData();
                 serialData.seperateData();
+                acc.convertData();
             }
         }
     }

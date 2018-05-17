@@ -49,9 +49,19 @@ public class Utils {
 
     public static int hexStringToInt(String hexString) {
         int result = 0;
-        result = Integer.parseInt(hexString, 16);
+        result = (int) Long.parseLong(hexString, 16);
         return result;
     }
 
+    public static ArrayList<String> seperate4Hex(String hexString) {
+        if (!(hexString == null)) {
+            ArrayList<String> hexList = new ArrayList<>();
+            for (int i = 0; i < hexString.length(); i = i + 4) {
+                hexList.add(hexString.substring(i, i+4));
+            }
+            return hexList;
+        }
+        else return null;
+    }
 
 }

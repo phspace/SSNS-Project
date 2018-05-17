@@ -30,7 +30,7 @@ public class BaroObserver extends SensorsObserver {
         return this.name;
     }
 
-    public void extractValue() {
+    private void extractValue() {
         String rawValue = data.substring(22, 32);
         data = rawValue;
     }
