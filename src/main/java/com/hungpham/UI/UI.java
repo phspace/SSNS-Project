@@ -1,4 +1,4 @@
-package com.hungpham.Controller;
+package com.hungpham.UI;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -49,5 +49,6 @@ public class UI extends Frame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         command = commandField.getText();
+        command = "stop";
     }
 }

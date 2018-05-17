@@ -1,7 +1,7 @@
 package com.hungpham;
 
 import com.hungpham.Controller.SerialPortController;
-import com.hungpham.Controller.UI;
+import com.hungpham.UI.UI;
 import com.hungpham.Data.AcceProcessing;
 import com.hungpham.Data.DataFactory;
 
