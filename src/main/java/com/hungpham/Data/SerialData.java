@@ -4,19 +4,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 
+/**
+ * This class is made to fetch new data from data queue and notify observers
+ */
+
 public class SerialData {
-    private String acceValue;
-    private String baroValue;
     private volatile String rawData;
     private List<SensorsObserver> observers = new ArrayList<SensorsObserver>();
 
+    // this is the data queue
     public static volatile LinkedBlockingQueue<String> dataQueue;
 
     public SerialData() {
-        acceValue = null;
-        baroValue = null;
         rawData = null;
-        dataQueue = new LinkedBlockingQueue<String>();
+        dataQueue = new LinkedBlockingQueue<>();
     }
 
     public void updateData() {

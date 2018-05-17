@@ -10,6 +10,11 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.TooManyListenersException;
 
+/**
+ * Main control class for Serial port
+ * Write and read data from Serial port
+ */
+
 public class SerialPortController implements Runnable, SerialPortEventListener {
     private SerialPort serialPort;
     private InputStream inputStream;
@@ -110,6 +115,10 @@ public class SerialPortController implements Runnable, SerialPortEventListener {
                 }
                 data = Utils.bytesToHexString(readBuffer);
                 if (mode == 1) {
+                    /**
+                     * add data to a queue for the data notifier SensorData to update new value
+                     * and notify observers
+                     */
                     SerialData.dataQueue.add(data);
                 }
                 //System.out.println(data);

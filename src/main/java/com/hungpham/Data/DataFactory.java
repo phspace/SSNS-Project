@@ -1,5 +1,8 @@
 package com.hungpham.Data;
 
+/**
+ * This class creates run instances for Observer pattern
+ */
 public class DataFactory implements Runnable {
     private AcceObserver acc;
     private BaroObserver bar;
