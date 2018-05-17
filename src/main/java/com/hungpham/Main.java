@@ -2,6 +2,7 @@ package com.hungpham;
 
 import com.hungpham.Controller.SerialPortController;
 import com.hungpham.Controller.UI;
+import com.hungpham.Data.AcceProcessing;
 import com.hungpham.Data.DataFactory;
 
 public class Main {
@@ -15,6 +16,10 @@ public class Main {
         DataFactory df = new DataFactory();
         Thread runSD = new Thread(df);
         runSD.start();
+        AcceProcessing acceProcessing = new AcceProcessing();
+        Thread accThread = new Thread(acceProcessing);
+        accThread.start();
+
     }
 
     static class RunSerialController extends Thread {

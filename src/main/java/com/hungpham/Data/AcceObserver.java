@@ -19,20 +19,6 @@ public class AcceObserver extends SensorsObserver {
         data = null;
     }
 
-    public void convertData() {
-        if (!(data == null)) {
-            ArrayList<String> hexList = Utils.seperate4Hex(data);
-            for (String s : hexList) {
-                int i = 0;
-                String reverse;
-                reverse = s.substring(2,4) + s.substring(0,2);
-                acce[i] = (Utils.hexStringToInt(reverse) * 1.0) / (32768/8);
-                System.out.println("Accelerometer value: " + acce[i]);
-                i++;
-            }
-        }
-    }
-
     public String getData() {
         return data;
     }
