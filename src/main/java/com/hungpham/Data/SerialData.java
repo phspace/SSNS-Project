@@ -14,6 +14,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class SerialData {
     private volatile String rawData;
     private Utils utils;
+    private int checkAcc = 0;
 
     public SerialData() {
         utils = new Utils();
@@ -32,11 +33,17 @@ public class SerialData {
             //notifySpecificObserver("acce");
             String rawValue = rawData.substring(34, 46);
             if (rawValue.contains("000000000000")) {
+                checkAcc = 1;
                 //System.out.println("Wrong acce data");
             } else {
                 utils.TCPSend("localhost", Definitions.RECEIVING_ACC_VALUE_PORT, rawValue);
             }
-        } else if (rawData.indexOf("142C00000000000000") == 0) {
+        } else if(checkAcc == 1) {
+            String rawValue = rawData.substring(2, 14);
+            checkAcc = 0;
+            utils.TCPSend("localhost", Definitions.RECEIVING_ACC_VALUE_PORT, rawValue);
+        }
+        else if (rawData.indexOf("142C00000000000000") == 0) {
             String rawValue = rawData.substring(18, 30);
             if (rawValue.contains("000000000000")) {
                 //System.out.println("Wrong acce data");
