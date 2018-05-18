@@ -38,20 +38,25 @@ public class SerialData {
             } else {
                 utils.TCPSend("localhost", Definitions.RECEIVING_ACC_VALUE_PORT, rawValue);
             }
-        } else if(checkAcc == 1) {
+        } else if (checkAcc == 1) {
             String rawValue = rawData.substring(2, 14);
             checkAcc = 0;
             utils.TCPSend("localhost", Definitions.RECEIVING_ACC_VALUE_PORT, rawValue);
-        }
-        else if (rawData.indexOf("142C00000000000000") == 0) {
+        } else if (rawData.indexOf("142C00000000000000") == 0) {
             String rawValue = rawData.substring(18, 30);
             if (rawValue.contains("000000000000")) {
                 //System.out.println("Wrong acce data");
             } else {
                 utils.TCPSend("localhost", Definitions.RECEIVING_ACC_VALUE_PORT, rawValue);
             }
-        }
-        else if (rawData.indexOf(bar) == 0) {
+        } else if (rawData.indexOf("142C00000000000000") > 0) {
+            String rawValue = rawData.substring(rawData.indexOf("142C00000000000000") + 18, rawData.indexOf("142C00000000000000") + 30);
+            if (rawValue.contains("000000000000")) {
+                //System.out.println("Wrong acce data");
+            } else {
+                utils.TCPSend("localhost", Definitions.RECEIVING_ACC_VALUE_PORT, rawValue);
+            }
+        } else if (rawData.indexOf(bar) == 0) {
             //notifySpecificObserver("baro");
             //Utils.TCPSend("localhost", Definitions.RECEIVING_BAR_VALUE_PORT, rawData);
         }

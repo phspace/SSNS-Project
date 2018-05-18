@@ -71,7 +71,7 @@ public class AcceProcessing implements Runnable {
         }
         offsets[0] = sums[0] / 50 - 0;
         offsets[1] = sums[1] / 50 - 0;
-        offsets[2] = sums[2] / 50 - 4011;
+        offsets[2] = sums[2] / 50 - 4022;
     }
 
     public void printData() {

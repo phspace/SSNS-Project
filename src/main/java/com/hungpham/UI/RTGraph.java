@@ -28,7 +28,7 @@ public class RTGraph implements Runnable {
     private void go() {
 
         // Create Chart
-        chart = QuickChart.getChart("Accelerometer Z-axis", "Time", "Value", "acc_z", new double[] { 0 }, new double[] { 0 });
+        chart = QuickChart.getChart("Accelerometer Axis", "Time", "Value", "acc_z", new double[] { 0 }, new double[] { 0 });
         chart.getStyler().setLegendVisible(false);
         chart.getStyler().setXAxisTicksVisible(false);
 
