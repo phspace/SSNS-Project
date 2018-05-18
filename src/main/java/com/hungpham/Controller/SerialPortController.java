@@ -21,6 +21,7 @@ public class SerialPortController implements Runnable, SerialPortEventListener {
     private InputStream inputStream;
     private OutputStream outputStream;
     private static CommPortIdentifier portID;
+    private Utils utils;
 
     public static volatile int mode = 0;
 
@@ -30,6 +31,7 @@ public class SerialPortController implements Runnable, SerialPortEventListener {
 
     public SerialPortController() {
         data = null;
+        utils = new Utils();
         init();
     }
 
@@ -98,7 +100,7 @@ public class SerialPortController implements Runnable, SerialPortEventListener {
     }
 
     public void write(String message) {
-        byte[] bytes = Utils.stringToHexBytes(message);
+        byte[] bytes = utils.stringToHexBytes(message);
         System.out.println("Writing \"" + message + "\" to " + serialPort.getName());
         try {
             outputStream.write(bytes);
@@ -114,13 +116,13 @@ public class SerialPortController implements Runnable, SerialPortEventListener {
                 while (inputStream.available() > 0) {
                     int numBytes = inputStream.read(readBuffer);
                 }
-                data = Utils.bytesToHexString(readBuffer);
+                data = utils.bytesToHexString(readBuffer);
                 if (mode == 1) {
                     /**
                      * add data to a queue for the data notifier SensorData to update new value
                      * and notify observers
                      */
-                    SerialData.dataQueue.add(data);
+                    utils.TCPSend("localhost", Definitions.RECEIVING_SENSOR_VALUE_PORT, data);
                 }
                 //System.out.println(data);
             } catch (IOException ioe) {
@@ -130,7 +132,7 @@ public class SerialPortController implements Runnable, SerialPortEventListener {
     }
 
     private void executeControlHex(String path) {
-        ArrayList<String> strings = Utils.readHexFromFile(path);
+        ArrayList<String> strings = utils.readHexFromFile(path);
         for (String s : strings) {
             write(s);
             try {

@@ -1,5 +1,8 @@
 package com.hungpham.Data;
 
+import com.hungpham.Controller.Definitions;
+import com.hungpham.Utils.Utils;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -10,45 +13,40 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 public class SerialData {
     private volatile String rawData;
-    private List<SensorsObserver> observers = new ArrayList<SensorsObserver>();
-
-    // this is the data queue
-    public static volatile LinkedBlockingQueue<String> dataQueue;
+    private Utils utils;
 
     public SerialData() {
+        utils = new Utils();
         rawData = null;
-        dataQueue = new LinkedBlockingQueue<>();
     }
 
     public void updateData() {
-        try {
-            rawData = dataQueue.take();
-            //System.out.println("Raw data:" + rawData);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
+        rawData = utils.TCPReceive(Definitions.RECEIVING_SENSOR_VALUE_PORT);
+        seperateData();
     }
 
-    public void attach(SensorsObserver observer) {
-        observers.add(observer);
-    }
-
-    public synchronized void notifySpecificObserver(String sensor) {
-        for (SensorsObserver observer : observers) {
-            if (observer.getName().equalsIgnoreCase(sensor)) {
-                observer.update();
-            }
-        }
-    }
-
-    public void seperateData() {
+    private void seperateData() {
         String accel = "04FF1A1B05000000142C";
         String bar = "04FF0E1B050000000824";
         if (rawData.indexOf(accel) == 0) {
-            notifySpecificObserver("acce");
-        } else if (rawData.indexOf(bar) == 0) {
-            notifySpecificObserver("baro");
+            //notifySpecificObserver("acce");
+            String rawValue = rawData.substring(34, 46);
+            if (rawValue.contains("000000000000")) {
+                //System.out.println("Wrong acce data");
+            } else {
+                utils.TCPSend("localhost", Definitions.RECEIVING_ACC_VALUE_PORT, rawValue);
+            }
+        } else if (rawData.indexOf("142C00000000000000") == 0) {
+            String rawValue = rawData.substring(18, 30);
+            if (rawValue.contains("000000000000")) {
+                //System.out.println("Wrong acce data");
+            } else {
+                utils.TCPSend("localhost", Definitions.RECEIVING_ACC_VALUE_PORT, rawValue);
+            }
+        }
+        else if (rawData.indexOf(bar) == 0) {
+            //notifySpecificObserver("baro");
+            //Utils.TCPSend("localhost", Definitions.RECEIVING_BAR_VALUE_PORT, rawData);
         }
     }
 

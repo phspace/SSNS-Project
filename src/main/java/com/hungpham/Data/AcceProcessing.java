@@ -1,11 +1,13 @@
 package com.hungpham.Data;
 
 import com.hungpham.Algorithms.KalmanFilter;
+import com.hungpham.Controller.Definitions;
 import com.hungpham.Controller.SerialPortController;
 import com.hungpham.Utils.Utils;
 import gnu.io.SerialPort;
 
 import java.util.ArrayList;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class AcceProcessing implements Runnable {
 
@@ -13,10 +15,12 @@ public class AcceProcessing implements Runnable {
     private double[] filtered;
     private double[] offsets;
     private int samples;
+    private Utils utils;
 
     private KalmanFilter[] kalmanFilters;
 
     public AcceProcessing() {
+        utils = new Utils();
         acce = new double[3];
         offsets = new double[3];
         filtered = new double[3];
@@ -28,18 +32,16 @@ public class AcceProcessing implements Runnable {
     }
 
     private void readRaw() {
-
         ArrayList<String> hexList = null;
-        try {
-            hexList = Utils.seperate4Hex(AcceObserver.acceData.take());
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        String received = utils.TCPReceive(Definitions.RECEIVING_ACC_VALUE_PORT);
+
+        hexList = utils.seperate4Hex(received);
+
         int i = 0;
         for (String s : hexList) {
             String reverse;
             reverse = s.substring(2, 4) + s.substring(0, 2);
-            acce[i] = (Utils.hexStringToInt(reverse) * 1.0) - offsets[i];
+            acce[i] = (utils.hexStringToInt(reverse) * 1.0) - offsets[i];
             //acce[i] = (Utils.hexStringToInt(reverse) * 1.0) / (32768 / 8);
             if (acce[i] > 32768) {
                 acce[i] = acce[i] - 65536;
@@ -61,6 +63,7 @@ public class AcceProcessing implements Runnable {
         double[] sums = new double[3];
         while (samples < 50) {
             readRaw();
+            System.out.println("calibrating...");
             sums[0] += acce[0];
             sums[1] += acce[1];
             sums[2] += acce[2];
@@ -76,21 +79,21 @@ public class AcceProcessing implements Runnable {
             acce[i] = acce[i] / (32768 / 8);
             System.out.println("Accelerometer value: " + i + "   " + acce[i]);
         }
+        utils.TCPSend("localhost", Definitions.GRAPH_PORT, Double.toString(acce[2]));
     }
 
     @Override
     public void run() {
         while (true) {
-            if (AcceObserver.acceData.size() > 0) {
-                if (samples < 50) {
-                    System.out.println("calibrating...");
-                    calibrateAcce();
-                }
-                readRaw();
-                printData();
-                //kalmanFilter();
+            if (samples < 50) {
+                System.out.println("calibrating...");
+                calibrateAcce();
             }
-
+            readRaw();
+            printData();
+            //kalmanFilter();
         }
+
+
     }
 }

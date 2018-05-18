@@ -3,17 +3,17 @@ package com.hungpham.Utils;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 public class Utils {
 
-    private final static char[] hexArray = "0123456789ABCDEF".toCharArray();
+    private final char[] hexArray = "0123456789ABCDEF".toCharArray();
 
-    public static String bytesToHexString(byte[] bytes) {
+    public String bytesToHexString(byte[] bytes) {
         char[] hexChars = new char[bytes.length * 2];
         for ( int j = 0; j < bytes.length; j++ ) {
             int v = bytes[j] & 0xFF;
@@ -23,7 +23,7 @@ public class Utils {
         return new String(hexChars);
     }
 
-    public static byte[] stringToHexBytes(String string) {
+    public byte[] stringToHexBytes(String string) {
         byte[] bytes = new byte[0];
         try {
             bytes = Hex.decodeHex(string.toCharArray());
@@ -33,7 +33,7 @@ public class Utils {
         return bytes;
     }
 
-    public static ArrayList<String> readHexFromFile(String path) {
+    public ArrayList<String> readHexFromFile(String path) {
         ArrayList<String> result = new ArrayList<String>();
         File file = new File(path);
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
@@ -47,13 +47,13 @@ public class Utils {
         return result;
     }
 
-    public static int hexStringToInt(String hexString) {
+    public int hexStringToInt(String hexString) {
         int result = 0;
         result = (int) Long.parseLong(hexString, 16);
         return result;
     }
 
-    public static ArrayList<String> seperate4Hex(String hexString) {
+    public ArrayList<String> seperate4Hex(String hexString) {
         if (!(hexString == null)) {
             ArrayList<String> hexList = new ArrayList<>();
             for (int i = 0; i < hexString.length(); i = i + 4) {
@@ -62,6 +62,51 @@ public class Utils {
             return hexList;
         }
         else return null;
+    }
+
+    public void TCPSend(String IP, int port, String message) {
+        try {
+            Socket s = new Socket(IP, port);
+            DataOutputStream out = new DataOutputStream(s.getOutputStream());
+            DataInputStream in = new DataInputStream(s.getInputStream());
+            out.writeUTF(message);
+            String data = in.readUTF();
+            //System.out.println("Received: " + data);
+            s.close();
+        } catch (UnknownHostException e) {
+            System.out.println(" Sock:" + e.getMessage());
+        } catch (EOFException e) {
+            System.out.println(" EOF:" + e.getMessage());
+        } catch (IOException e) {
+            System.out.println(" IO:" + e.getMessage() + " (Connection to " + port + ")");
+        }
+    }
+
+    public String TCPReceive(int port) {
+        ServerSocket listenSocket = null;
+        DataInputStream in;
+        DataOutputStream out;
+        String message = "";
+        try {
+
+            listenSocket = new ServerSocket(port);
+            Socket clientSocket = listenSocket.accept();
+            out = new DataOutputStream(clientSocket.getOutputStream());
+            in = new DataInputStream(clientSocket.getInputStream());
+            message = in.readUTF();
+            out.writeUTF(message);
+            //System.out.println("Sent data back: " + message);
+            clientSocket.close();
+            listenSocket.close();
+        } catch (EOFException e) {
+            System.out.println(" EOF:" + e.getMessage());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return message;
     }
 
 }
