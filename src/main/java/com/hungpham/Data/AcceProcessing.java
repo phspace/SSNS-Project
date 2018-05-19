@@ -42,7 +42,6 @@ public class AcceProcessing implements Runnable {
             String reverse;
             reverse = s.substring(2, 4) + s.substring(0, 2);
             acce[i] = (utils.hexStringToInt(reverse) * 1.0) - offsets[i];
-            //acce[i] = (Utils.hexStringToInt(reverse) * 1.0) / (32768 / 8);
             if (acce[i] > 32768) {
                 acce[i] = acce[i] - 65536;
             }
@@ -71,15 +70,19 @@ public class AcceProcessing implements Runnable {
         }
         offsets[0] = sums[0] / 50 - 0;
         offsets[1] = sums[1] / 50 - 0;
-        offsets[2] = sums[2] / 50 - 4022;
+        offsets[2] = sums[2] / 50 - 4096;
     }
 
     public void printData() {
         for (int i = 0; i < 3; i++) {
             acce[i] = acce[i] / (32768 / 8);
-            System.out.println("Accelerometer value: " + i + "   " + acce[i]);
+            //System.out.println("Accelerometer value: " + i + "   " + acce[i]);
         }
-        utils.TCPSend("localhost", Definitions.GRAPH_PORT, Double.toString(acce[2]));
+        double acc_value = Math.sqrt(acce[0] * acce[0] + acce[1] * acce[1] + acce[2] * acce[2]);
+        String a = Double.toString(acc_value);
+        System.out.println("Accelerometer sqrt: " + acc_value);
+        utils.TCPSend("localhost", Definitions.GRAPH_PORT, a);
+        utils.TCPSend("localhost", Definitions.DATABASE_PORT, a);
     }
 
     @Override
@@ -91,7 +94,6 @@ public class AcceProcessing implements Runnable {
             }
             readRaw();
             printData();
-            //kalmanFilter();
         }
 
 

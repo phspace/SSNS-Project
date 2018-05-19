@@ -10,7 +10,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="SSNS-Project" target="7" />
+      <module name="SSNS-Project" target="8" />
     </bytecodeTargetLevel>
   </component>
 </project>
