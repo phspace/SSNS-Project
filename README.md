@@ -8,7 +8,7 @@
 
 
 ... To find number of serial port on Macbook: open Terminal, run command "ls /dev/tty.*" and take the smallest number.
-it should be like this "/dev/tty.usbmodemL1000051"
+it should be like this "/dev/tty.usbmodemL1000051", and change the value in the line "defaultPort = "/dev/tty.usbmodemL1000051";" of class SerialPortController
 
 
 
