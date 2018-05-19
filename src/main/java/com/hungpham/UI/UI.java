@@ -35,7 +35,7 @@ public class UI extends Frame implements ActionListener {
 
             }
         });
-        b1 = new Button("Send command");
+        b1 = new Button("Stop command");
         b1.setFont(font1);
         b1.setBounds(50,400,500,200);
         b1.addActionListener(this);
