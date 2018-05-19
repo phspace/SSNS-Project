@@ -11,7 +11,7 @@
 it should be like this "/dev/tty.usbmodemL1000051", and change the value in the line "defaultPort = "/dev/tty.usbmodemL1000051";" of class SerialPortController
 
 
-
+#### Please install Influxdb and read influxdb Getting Started (https://docs.influxdata.com/influxdb/v1.5/introduction/getting-started/)  before doing these
 3. Create new influx database with name "ssns"
 4. Create new influx db user : create user "ssns" with password 'ssns-project'
 5. grant access: grant ALL on ssns to ssns
