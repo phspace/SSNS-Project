@@ -4,6 +4,7 @@ import com.hungpham.Controller.DatabaseFetch;
 import com.hungpham.Controller.DatabasePush;
 import com.hungpham.Controller.SerialPortController;
 import com.hungpham.Data.AcceProcessing;
+import com.hungpham.Data.BaroProcessing;
 import com.hungpham.Data.DataFactory;
 import com.hungpham.UI.RTGraph;
 import com.hungpham.UI.UI;
@@ -50,15 +51,22 @@ public class Main {
         Thread accThread = new Thread(acceProcessing);
         accThread.start(); // comment this line if not use
 
-        // show real time graph
-        RTGraph rtGraph = new RTGraph();
-        Thread graph = new Thread(rtGraph);
-        graph.start(); // comment this line if not use
+        // to process baro data
+        BaroProcessing baroProcessing = new BaroProcessing();
+        Thread baroThread = new Thread(baroProcessing);
+        baroThread.start(); // comment this line if not use
 
         // write to database
         DatabasePush push = new DatabasePush();
         Thread pushDB = new Thread(push);
         pushDB.start(); // comment this line if not use
+    }
+
+    public static void runGraph() {
+        // show real time graph
+        RTGraph rtGraph = new RTGraph();
+        Thread graph = new Thread(rtGraph);
+        graph.start(); // comment this line if not use
     }
 
     static class RunSerialController extends Thread {

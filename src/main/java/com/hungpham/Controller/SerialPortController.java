@@ -111,7 +111,7 @@ public class SerialPortController implements Runnable, SerialPortEventListener {
     public synchronized void serialEvent(SerialPortEvent event) {
         if (event.getEventType() == SerialPortEvent.DATA_AVAILABLE) {
             //System.out.println("Data available: ");
-            byte[] readBuffer = new byte[32];
+            byte[] readBuffer = new byte[64];
             try {
                 while (inputStream.available() > 0) {
                     int numBytes = inputStream.read(readBuffer);

@@ -14,7 +14,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class SerialData {
     private volatile String rawData;
     private Utils utils;
-    private int checkAcc = 0;
 
     public SerialData() {
         utils = new Utils();
@@ -27,39 +26,41 @@ public class SerialData {
     }
 
     private void seperateData() {
-        String accel = "04FF1A1B05000000142C";
-        String bar = "04FF0E1B050000000824";
-        if (rawData.indexOf(accel) == 0) {
-            //notifySpecificObserver("acce");
-            String rawValue = rawData.substring(34, 46);
-            if (rawValue.contains("000000000000")) {
-                checkAcc = 1;
+        String accel = "142C00000000000000";
+        String bar = "082400";
+
+        if (rawData.contains(accel) && rawData.contains(bar)) {
+            String rawAccValue = rawData.substring(rawData.indexOf(accel) + 18, rawData.indexOf(accel) + 30);
+            String rawBaroValue = rawData.substring(rawData.indexOf(bar) + 6, rawData.indexOf(bar) + 18);
+            if (rawAccValue.contains("000000000000")) {
                 //System.out.println("Wrong acce data");
             } else {
-                utils.TCPSend("localhost", Definitions.RECEIVING_ACC_VALUE_PORT, rawValue);
+                utils.TCPSend("localhost", Definitions.RECEIVING_ACC_VALUE_PORT, rawAccValue);
             }
-        } else if (checkAcc == 1) {
-            String rawValue = rawData.substring(2, 14);
-            checkAcc = 0;
-            utils.TCPSend("localhost", Definitions.RECEIVING_ACC_VALUE_PORT, rawValue);
-        } else if (rawData.indexOf("142C00000000000000") == 0) {
-            String rawValue = rawData.substring(18, 30);
-            if (rawValue.contains("000000000000")) {
+
+            if (rawBaroValue.contains("000000000000")) {
                 //System.out.println("Wrong acce data");
             } else {
-                utils.TCPSend("localhost", Definitions.RECEIVING_ACC_VALUE_PORT, rawValue);
+                utils.TCPSend("localhost", Definitions.RECEIVING_BAR_VALUE_PORT, rawBaroValue);
             }
-        } else if (rawData.indexOf("142C00000000000000") > 0) {
-            String rawValue = rawData.substring(rawData.indexOf("142C00000000000000") + 18, rawData.indexOf("142C00000000000000") + 30);
-            if (rawValue.contains("000000000000")) {
-                //System.out.println("Wrong acce data");
-            } else {
-                utils.TCPSend("localhost", Definitions.RECEIVING_ACC_VALUE_PORT, rawValue);
+        } else if (rawData.contains(accel) || rawData.contains(bar)) {
+            if (rawData.contains(accel)) {
+                String rawAccValue = rawData.substring(rawData.indexOf(accel) + 18, rawData.indexOf(accel) + 30);
+                if (rawAccValue.contains("000000000000")) {
+                    //System.out.println("Wrong acce data");
+                } else {
+                    utils.TCPSend("localhost", Definitions.RECEIVING_ACC_VALUE_PORT, rawAccValue);
+                }
+            } else if (rawData.contains(bar)) {
+                String rawBaroValue = rawData.substring(rawData.indexOf(bar) + 6, rawData.indexOf(bar) + 18);
+                if (rawBaroValue.contains("000000000000")) {
+                    //System.out.println("Wrong acce data");
+                } else {
+                    utils.TCPSend("localhost", Definitions.RECEIVING_BAR_VALUE_PORT, rawBaroValue);
+                }
             }
-        } else if (rawData.indexOf(bar) == 0) {
-            //notifySpecificObserver("baro");
-            //Utils.TCPSend("localhost", Definitions.RECEIVING_BAR_VALUE_PORT, rawData);
         }
+
     }
 
     public String getData() {
