@@ -17,6 +17,8 @@ public class Main {
     public static void main(String[] args) {
         // write your code here
 
+        // please run the TestGraph2 main method
+
         //startEverything(); // comment this line to not start measuring and record to database
 
         //readFromDBExample(); // comment this to not read data from database
