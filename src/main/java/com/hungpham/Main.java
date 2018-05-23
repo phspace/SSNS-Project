@@ -30,6 +30,7 @@ public class Main {
         for (AccelerometerPoint a : fetch.getValueList()) {
             System.out.println(a.getAcce_value());
         }
+
     }
 
     public static void startEverything() {
@@ -62,6 +63,7 @@ public class Main {
         DatabasePush push = new DatabasePush();
         Thread pushDB = new Thread(push);
         pushDB.start(); // comment this line if not use
+
     }
 
     public static void runGraph() {

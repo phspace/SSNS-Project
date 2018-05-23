@@ -20,6 +20,11 @@ public class DatabaseFetch {
         valueList = database.readDB(from, to);
     }
 
+    //controller for reading most recent item from database
+    public void readDataMostRecent(int LIMIT) {
+        valueList = database.readDB(LIMIT);
+    }
+
     public LinkedList<AccelerometerPoint> getValueList() {
         return valueList;
     }
