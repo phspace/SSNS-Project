@@ -47,4 +47,14 @@ public class DatabaseConnector {
         return (LinkedList<AccelerometerPoint>) accelerometerPointsPointList;
     }
 
+    // this method create new query to take most recent values from database
+    public LinkedList<AccelerometerPoint> readDB(int LIMIT) {
+        String qu = "select acce_value from accelerometer ORDER BY time DESC LIMIT " + LIMIT;
+        Query q = new Query(qu, "ssns");
+        QueryResult queryResult = database.query(q);
+        InfluxDBResultMapper resultMapper = new InfluxDBResultMapper();
+        List<AccelerometerPoint> accelerometerPointsPointList = resultMapper.toPOJO(queryResult, AccelerometerPoint.class);
+        return (LinkedList<AccelerometerPoint>) accelerometerPointsPointList;
+    }
+
 }
