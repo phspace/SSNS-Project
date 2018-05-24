@@ -2,8 +2,6 @@ package com.hungpham.UI;
 
 import com.hungpham.Utils.Utils;
 import javafx.animation.AnimationTimer;
-import javafx.animation.Timeline;
-import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart.Series;
@@ -12,14 +10,14 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 
 /**
- * Creates a real-time chart using SwingWorker
+ * Creates real-time charts using JavaFX
  */
 public abstract class RTGraph {
     protected static final int MAX_DATA_POINTS = 100;
 
     protected Series series;
     protected int xSeriesData = 0;
-    protected ConcurrentLinkedQueue<Number> dataQ = new ConcurrentLinkedQueue<Number>();
+    protected ConcurrentLinkedQueue<Number> dataQ = new ConcurrentLinkedQueue<>();
     protected ExecutorService executor;
     protected NumberAxis xAxis;
     protected Utils utils;

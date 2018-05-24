@@ -14,8 +14,8 @@ public class AcceGraph extends RTGraph {
     private class AddToQueue implements Runnable {
         public void run() {
             // add a item of random data to queue
-            String accz = utils.TCPReceive(Definitions.GRAPH_BARO_PORT);
-            dataQ.add(Double.parseDouble(accz));
+            String acce = utils.TCPReceive(Definitions.GRAPH_BARO_PORT);
+            dataQ.add(Double.parseDouble(acce));
             executor.execute(this);
         }
     }

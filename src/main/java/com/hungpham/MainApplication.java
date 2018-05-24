@@ -11,7 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
 
-public class MainClass extends Application {
+public class MainApplication extends Application {
     public static volatile String command = "";
 
     /**
