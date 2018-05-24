@@ -6,23 +6,9 @@ import com.hungpham.Controller.SerialPortController;
 import com.hungpham.Data.AcceProcessing;
 import com.hungpham.Data.BaroProcessing;
 import com.hungpham.Data.DataFactory;
-import com.hungpham.UI.RTGraph;
-import com.hungpham.UI.UI;
 import com.hungpham.database.AccelerometerPoint;
 
-import javax.xml.crypto.Data;
-
-public class Main {
-
-    public static void main(String[] args) {
-        // write your code here
-
-        // please run the TestGraph2 main method
-
-        //startEverything(); // comment this line to not start measuring and record to database
-
-        //readFromDBExample(); // comment this to not read data from database
-    }
+public class FunctionsWrapper {
 
     public static void readFromDBExample() {
         DatabaseFetch fetch = new DatabaseFetch();
@@ -35,10 +21,6 @@ public class Main {
 
     public static void startEverything() {
         // comment to turn off any function
-
-        // to run UI
-        UIRunner u = new UIRunner();
-        u.start(); // comment this line if not use
 
         // to run serial port read write
         RunSerialController t = new RunSerialController();
@@ -66,13 +48,6 @@ public class Main {
 
     }
 
-    public static void runGraph() {
-        // show real time graph
-        RTGraph rtGraph = new RTGraph();
-        Thread graph = new Thread(rtGraph);
-        graph.start(); // comment this line if not use
-    }
-
     static class RunSerialController extends Thread {
         @Override
         public void run() {
@@ -80,10 +55,4 @@ public class Main {
         }
     }
 
-    static class UIRunner extends Thread {
-        @Override
-        public void run() {
-            UI ui = new UI();
-        }
-    }
 }

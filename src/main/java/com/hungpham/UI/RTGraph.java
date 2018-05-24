@@ -1,88 +1,89 @@
 package com.hungpham.UI;
 
-import java.util.LinkedList;
-import java.util.List;
-
-import javax.swing.SwingWorker;
-
-import com.hungpham.Controller.Definitions;
 import com.hungpham.Utils.Utils;
-import org.knowm.xchart.QuickChart;
-import org.knowm.xchart.SwingWrapper;
-import org.knowm.xchart.XYChart;
+import javafx.animation.AnimationTimer;
+import javafx.animation.Timeline;
+import javafx.scene.chart.AreaChart;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart.Series;
+
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ExecutorService;
 
 /**
  * Creates a real-time chart using SwingWorker
  */
-public class RTGraph implements Runnable {
+public abstract class RTGraph {
+    protected static final int MAX_DATA_POINTS = 100;
 
-    GraphWorker graphWorker;
-    SwingWrapper<XYChart> sw;
-    XYChart chart;
-    private Utils utils;
+    protected Series series;
+    protected int xSeriesData = 0;
+    protected ConcurrentLinkedQueue<Number> dataQ = new ConcurrentLinkedQueue<Number>();
+    protected ExecutorService executor;
+    protected NumberAxis xAxis;
+    protected Utils utils;
+
+    protected final LineChart<Number, Number> lineChart;
 
     public RTGraph() {
         utils = new Utils();
-    }
+        xAxis = new NumberAxis(0, MAX_DATA_POINTS, MAX_DATA_POINTS / 10);
 
-    private void go() {
+        NumberAxis yAxis = new NumberAxis();
+        yAxis.setAutoRanging(true);
 
-        // Create Chart
-        chart = QuickChart.getChart("Accelerometer Axis", "Time", "Value", "acc_z", new double[] { 0 }, new double[] { 0 });
-        chart.getStyler().setLegendVisible(false);
-        chart.getStyler().setXAxisTicksVisible(false);
-
-        // Show it
-        sw = new SwingWrapper<>(chart);
-        sw.displayChart();
-
-        graphWorker = new GraphWorker();
-        graphWorker.execute();
-    }
-
-    @Override
-    public void run() {
-        go();
-    }
-
-    private class GraphWorker extends SwingWorker<Boolean, double[]> {
-
-        LinkedList<Double> fifo = new LinkedList<>();
-
-        public GraphWorker() {
-            fifo.add(0.0);
-        }
-
-        @Override
-        protected Boolean doInBackground() {
-
-            while (!isCancelled() ) {
-                int count = 0;
-                double[] array = new double[300];
-                //while (count < 10) {
-                    String accz = utils.TCPReceive(Definitions.GRAPH_PORT);
-                    fifo.add(Double.parseDouble(accz));
-                    if (fifo.size() > 300) {
-                        fifo.removeFirst();
-                    }
-                    //count++;
-                //}
-                for (int i = 0; i < fifo.size(); i++) {
-                    array[i] = fifo.get(i);
-                }
-                publish(array);
+        //-- Chart
+        lineChart = new LineChart<Number, Number>(xAxis, yAxis) {
+            // Override to remove symbols on each data point
+            @Override
+            protected void dataItemAdded(Series<Number, Number> series, int itemIndex, Data<Number, Number> item) {
             }
-
-            return true;
-        }
-
-        @Override
-        protected void process(List<double[]> chunks) {
-
-            double[] mostRecentDataSet = chunks.get(chunks.size() - 1);
-
-            chart.updateXYSeries("acc_z", null, mostRecentDataSet, null);
-            sw.repaintChart();
-        }
+        };
     }
+
+    protected void init(String nameChart) {
+        xAxis.setForceZeroInRange(false);
+        xAxis.setAutoRanging(false);
+        lineChart.setAnimated(false);
+        lineChart.setId("SSNSLiveChart");
+        lineChart.setTitle(nameChart);
+        lineChart.setPrefSize(640, 400);
+
+        //-- Chart Series
+        series = new LineChart.Series<Number, Number>();
+        series.setName(nameChart);
+        lineChart.getData().add(series);
+    }
+
+    public LineChart<Number, Number> getLineChart() {
+        return lineChart;
+    }
+
+    //-- Timeline gets called in the JavaFX thread
+    protected void prepareTimeline() {
+        // Every frame to take any data from queue and add to chart
+        new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                addDataToSeries();
+            }
+        }.start();
+    }
+
+    protected void addDataToSeries() {
+        for (int i = 0; i < MAX_DATA_POINTS; i++) { //-- add 20 numbers to the plot+
+            if (dataQ.isEmpty()) break;
+            series.getData().add(new LineChart.Data(xSeriesData++, dataQ.remove()));
+        }
+        // remove points to keep us at no more than MAX_DATA_POINTS
+        if (series.getData().size() > MAX_DATA_POINTS) {
+            series.getData().remove(0, series.getData().size() - MAX_DATA_POINTS);
+        }
+        // update
+        xAxis.setLowerBound(xSeriesData - MAX_DATA_POINTS);
+        xAxis.setUpperBound(xSeriesData - 1);
+    }
+
+    public abstract void executeGraph();
 }

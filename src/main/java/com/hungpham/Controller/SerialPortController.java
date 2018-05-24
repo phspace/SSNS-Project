@@ -1,7 +1,6 @@
 package com.hungpham.Controller;
 
-import com.hungpham.Data.SerialData;
-import com.hungpham.UI.UI;
+import com.hungpham.MainClass;
 import com.hungpham.Utils.Utils;
 import gnu.io.*;
 
@@ -149,7 +148,7 @@ public class SerialPortController implements Runnable, SerialPortEventListener {
         executeControlHex("runSensor");
         mode = 1;
         while (true) {
-            if (UI.command.equalsIgnoreCase("stop")) {
+            if (MainClass.command.equalsIgnoreCase("stop")) {
                 mode = 0;
                 break;
             }

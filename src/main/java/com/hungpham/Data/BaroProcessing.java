@@ -3,17 +3,27 @@ package com.hungpham.Data;
 import com.hungpham.Controller.Definitions;
 import com.hungpham.Utils.Utils;
 
+import java.util.ArrayList;
+
 public class BaroProcessing implements Runnable {
     private Utils utils;
     private String rawData;
+    private double baro;
+    private double[] filtered;
 
     public BaroProcessing() {
         utils = new Utils();
         rawData = null;
     }
 
-    public void readData() {
-        rawData = utils.TCPReceive(Definitions.RECEIVING_BAR_VALUE_PORT);
+    private void readRaw() {
+        ArrayList<String> hexList = null;
+        String received = utils.TCPReceive(Definitions.RECEIVING_BAR_VALUE_PORT);
+
+        hexList = utils.seperate2Hex(received);
+
+        String reversed = hexList.get(2) + hexList.get(1) + hexList.get(0);
+        baro = utils.hexStringToInt(reversed) / 100.0;
     }
 
     /**
@@ -30,8 +40,9 @@ public class BaroProcessing implements Runnable {
     @Override
     public void run() {
         while (true) {
-            readData();
-            System.out.println("Barometer value:  " + rawData);
+            readRaw();
+            System.out.println("Barometer value:  " + baro);
+            utils.TCPSend("localhost", Definitions.GRAPH_BARO_PORT, Double.toString(baro));
         }
     }
 }

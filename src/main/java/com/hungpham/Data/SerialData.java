@@ -31,7 +31,7 @@ public class SerialData {
 
         if (rawData.contains(accel) && rawData.contains(bar)) {
             String rawAccValue = rawData.substring(rawData.indexOf(accel) + 18, rawData.indexOf(accel) + 30);
-            String rawBaroValue = rawData.substring(rawData.indexOf(bar) + 6, rawData.indexOf(bar) + 18);
+            String rawBaroValue = rawData.substring(rawData.indexOf(bar) + 12, rawData.indexOf(bar) + 18);
             if (rawAccValue.contains("000000000000")) {
                 //System.out.println("Wrong acce data");
             } else {
@@ -52,7 +52,7 @@ public class SerialData {
                     utils.TCPSend("localhost", Definitions.RECEIVING_ACC_VALUE_PORT, rawAccValue);
                 }
             } else if (rawData.contains(bar)) {
-                String rawBaroValue = rawData.substring(rawData.indexOf(bar) + 6, rawData.indexOf(bar) + 18);
+                String rawBaroValue = rawData.substring(rawData.indexOf(bar) + 12, rawData.indexOf(bar) + 18);
                 if (rawBaroValue.contains("000000000000")) {
                     //System.out.println("Wrong acce data");
                 } else {

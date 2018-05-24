@@ -1,66 +1,88 @@
 package com.hungpham.UI;
 
-import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.scene.Scene;
-import javafx.scene.chart.LineChart;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart;
-import javafx.stage.Stage;
+import java.util.LinkedList;
+import java.util.List;
 
-import java.util.concurrent.atomic.AtomicInteger;
+import javax.swing.SwingWorker;
 
-public class TestGraph extends Application {
+import com.hungpham.Controller.Definitions;
+import com.hungpham.Utils.Utils;
+import org.knowm.xchart.QuickChart;
+import org.knowm.xchart.SwingWrapper;
+import org.knowm.xchart.XYChart;
 
-    private AtomicInteger tick = new AtomicInteger(0);
+/**
+ * Creates a real-time chart using SwingWorker
+ */
+public class TestGraph implements Runnable {
 
-    @Override
-    public void start(Stage stage) {
-        final NumberAxis xAxis = new NumberAxis();
-        final NumberAxis yAxis = new NumberAxis();
+    GraphWorker graphWorker;
+    SwingWrapper<XYChart> sw;
+    XYChart chart;
+    private Utils utils;
 
-        xAxis.setAnimated(false);
-        xAxis.setLabel("Tick");
-
-        yAxis.setAnimated(false);
-        yAxis.setLabel("Value");
-
-        XYChart.Series<Number, Number> series = new XYChart.Series<>();
-        series.setName("Values");
-
-        LineChart<Number, Number> chart = new LineChart<>(xAxis, yAxis);
-        chart.setAnimated(false);
-        chart.getData().add(series);
-
-        Scene scene = new Scene(chart, 620, 350);
-        stage.setScene(scene);
-        stage.show();
-
-        Thread updateThread = new Thread(() -> {
-            while (true) {
-                try {
-                    Thread.sleep(100);
-
-                    Platform.runLater(() -> {
-                        for (int i = 0; i < 20; i++) { //-- add 20 numbers to the plot+
-                            series.getData().add(new XYChart.Data<>(tick.incrementAndGet(), (int) (Math.random() * 100)));
-                        }
-                        if (series.getData().size() > 20) {
-                            series.getData().remove(0, series.getData().size() - 20);
-                        }
-                        xAxis.setLowerBound(tick.incrementAndGet() - 20);
-                        xAxis.setUpperBound(tick.incrementAndGet() - 1);
-                    });
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        });
-        updateThread.setDaemon(true);
-        updateThread.start();
+    public TestGraph() {
+        utils = new Utils();
     }
 
-    public static void main(String[] args) {
-        launch(args);
+    private void go() {
+
+        // Create Chart
+        chart = QuickChart.getChart("Accelerometer Axis", "Time", "Value", "acc_z", new double[]{0}, new double[]{0});
+        chart.getStyler().setLegendVisible(false);
+        chart.getStyler().setXAxisTicksVisible(false);
+
+        // Show it
+        sw = new SwingWrapper<>(chart);
+        sw.displayChart();
+
+        graphWorker = new GraphWorker();
+        graphWorker.execute();
+    }
+
+    @Override
+    public void run() {
+        go();
+    }
+
+    private class GraphWorker extends SwingWorker<Boolean, double[]> {
+
+        LinkedList<Double> fifo = new LinkedList<>();
+
+        public GraphWorker() {
+            fifo.add(0.0);
+        }
+
+        @Override
+        protected Boolean doInBackground() {
+
+            while (!isCancelled()) {
+                int count = 0;
+                double[] array = new double[300];
+                //while (count < 10) {
+                String accz = utils.TCPReceive(Definitions.GRAPH_BARO_PORT);
+                fifo.add(Double.parseDouble(accz));
+                if (fifo.size() > 300) {
+                    fifo.removeFirst();
+                }
+                //count++;
+                //}
+                for (int i = 0; i < fifo.size(); i++) {
+                    array[i] = fifo.get(i);
+                }
+                publish(array);
+            }
+
+            return true;
+        }
+
+        @Override
+        protected void process(List<double[]> chunks) {
+
+            double[] mostRecentDataSet = chunks.get(chunks.size() - 1);
+
+            chart.updateXYSeries("acc_z", null, mostRecentDataSet, null);
+            sw.repaintChart();
+        }
     }
 }

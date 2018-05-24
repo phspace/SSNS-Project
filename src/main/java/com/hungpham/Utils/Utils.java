@@ -15,7 +15,7 @@ public class Utils {
 
     public String bytesToHexString(byte[] bytes) {
         char[] hexChars = new char[bytes.length * 2];
-        for ( int j = 0; j < bytes.length; j++ ) {
+        for (int j = 0; j < bytes.length; j++) {
             int v = bytes[j] & 0xFF;
             hexChars[j * 2] = hexArray[v >>> 4];
             hexChars[j * 2 + 1] = hexArray[v & 0x0F];
@@ -57,11 +57,20 @@ public class Utils {
         if (!(hexString == null)) {
             ArrayList<String> hexList = new ArrayList<>();
             for (int i = 0; i < hexString.length(); i = i + 4) {
-                hexList.add(hexString.substring(i, i+4));
+                hexList.add(hexString.substring(i, i + 4));
             }
             return hexList;
-        }
-        else return null;
+        } else return null;
+    }
+
+    public ArrayList<String> seperate2Hex(String hexString) {
+        if (!(hexString == null)) {
+            ArrayList<String> hexList = new ArrayList<>();
+            for (int i = 0; i < hexString.length(); i = i + 2) {
+                hexList.add(hexString.substring(i, i + 2));
+            }
+            return hexList;
+        } else return null;
     }
 
     public void TCPSend(String IP, int port, String message) {
