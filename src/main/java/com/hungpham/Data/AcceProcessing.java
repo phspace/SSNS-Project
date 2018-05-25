@@ -82,7 +82,7 @@ public class AcceProcessing implements Runnable {
         String a = Double.toString(acc_value);
         System.out.println("Accelerometer sqrt: " + acc_value);
         utils.TCPSend("localhost", Definitions.GRAPH_ACCE_PORT, a);
-        //utils.TCPSend("localhost", Definitions.DATABASE_PORT, a);
+        utils.TCPSend("localhost", Definitions.DATABASE_ACCE_PORT, a);
     }
 
     @Override

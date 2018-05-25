@@ -1,6 +1,6 @@
 package com.hungpham.Algorithms;
 import com.hungpham.Controller.DatabaseFetch;
-import com.hungpham.database.AccelerometerPoint;
+import com.hungpham.database.SensorsPoint;
 
 
 public class ThresholdBased implements Runnable{
@@ -25,13 +25,13 @@ public class ThresholdBased implements Runnable{
     }
 
     public boolean compareWithUTV() {
-        if(fetch.getValueList().getFirst().getAcce_value() >= UTV) return true;
+        if(fetch.getValueList().getFirst().getAcce() >= UTV) return true;
         else return false;
     }
 
     public boolean findValueUnderLTV(){
-        for (AccelerometerPoint a : fetch.getValueList()) {
-            if (a.getAcce_value() <= LTV) return true;
+        for (SensorsPoint a : fetch.getValueList()) {
+            if (a.getAcce() <= LTV) return true;
         }
         return false;
     }

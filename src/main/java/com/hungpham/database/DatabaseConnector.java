@@ -30,31 +30,31 @@ public class DatabaseConnector {
         database.setDatabase("ssns");
     }
 
-    public void writeDB(Double acce) {
-        Point point = Point.measurement("accelerometer")
+    public void writeDB(String field, Double data) {
+        Point point = Point.measurement("ssnsproject")
                 .time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
-                .addField("acce_value", acce)
+                .addField(field, data)
                 .build();
         database.write(point);
     }
 
-    public LinkedList<AccelerometerPoint> readDB(String fromTime, String toTime) {
+    public LinkedList<SensorsPoint> readDB(String fromTime, String toTime) {
         String qu = "select * from accelerometer where time >= '" + fromTime + "' and time < '" + toTime + "'";
         Query q = new Query(qu, "ssns");
         QueryResult queryResult = database.query(q);
         InfluxDBResultMapper resultMapper = new InfluxDBResultMapper();
-        List<AccelerometerPoint> accelerometerPointsPointList = resultMapper.toPOJO(queryResult, AccelerometerPoint.class);
-        return (LinkedList<AccelerometerPoint>) accelerometerPointsPointList;
+        List<SensorsPoint> sensorsPointsPointList = resultMapper.toPOJO(queryResult, SensorsPoint.class);
+        return (LinkedList<SensorsPoint>) sensorsPointsPointList;
     }
 
     // this method create new query to take most recent values from database
-    public LinkedList<AccelerometerPoint> readDB(int LIMIT) {
+    public LinkedList<SensorsPoint> readDB(int LIMIT) {
         String qu = "select acce_value from accelerometer ORDER BY time DESC LIMIT " + LIMIT;
         Query q = new Query(qu, "ssns");
         QueryResult queryResult = database.query(q);
         InfluxDBResultMapper resultMapper = new InfluxDBResultMapper();
-        List<AccelerometerPoint> accelerometerPointsPointList = resultMapper.toPOJO(queryResult, AccelerometerPoint.class);
-        return (LinkedList<AccelerometerPoint>) accelerometerPointsPointList;
+        List<SensorsPoint> sensorsPointsPointList = resultMapper.toPOJO(queryResult, SensorsPoint.class);
+        return (LinkedList<SensorsPoint>) sensorsPointsPointList;
     }
 
 }

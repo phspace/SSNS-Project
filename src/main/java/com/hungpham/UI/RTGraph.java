@@ -20,16 +20,20 @@ public abstract class RTGraph {
     protected ConcurrentLinkedQueue<Number> dataQ = new ConcurrentLinkedQueue<>();
     protected ExecutorService executor;
     protected NumberAxis xAxis;
+    protected NumberAxis yAxis;
     protected Utils utils;
 
-    protected final LineChart<Number, Number> lineChart;
+    protected LineChart<Number, Number> lineChart;
 
-    public RTGraph() {
+    protected void init(String nameChart, double lowerRange, double upperRange, double tickUnit) {
         utils = new Utils();
         xAxis = new NumberAxis(0, MAX_DATA_POINTS, MAX_DATA_POINTS / 10);
 
-        NumberAxis yAxis = new NumberAxis();
-        yAxis.setAutoRanging(true);
+        xAxis.setForceZeroInRange(false);
+        xAxis.setAutoRanging(false);
+
+        yAxis = new NumberAxis(lowerRange, upperRange, tickUnit);
+        //yAxis.setAutoRanging(true);
 
         //-- Chart
         lineChart = new LineChart<Number, Number>(xAxis, yAxis) {
@@ -38,15 +42,11 @@ public abstract class RTGraph {
             protected void dataItemAdded(Series<Number, Number> series, int itemIndex, Data<Number, Number> item) {
             }
         };
-    }
 
-    protected void init(String nameChart) {
-        xAxis.setForceZeroInRange(false);
-        xAxis.setAutoRanging(false);
         lineChart.setAnimated(false);
         lineChart.setId("SSNSLiveChart");
         lineChart.setTitle(nameChart);
-        lineChart.setPrefSize(640, 400);
+        lineChart.setPrefSize(640, 640);
 
         //-- Chart Series
         series = new LineChart.Series<Number, Number>();

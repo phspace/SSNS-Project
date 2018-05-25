@@ -5,8 +5,8 @@ import org.influxdb.annotation.Measurement;
 
 import java.time.Instant;
 
-@Measurement(name = "accelerometer")
-public class AccelerometerPoint {
+@Measurement(name = "ssnsproject")
+public class SensorsPoint {
 
     @Column(name = "time")
     private Instant time;
@@ -14,7 +14,14 @@ public class AccelerometerPoint {
     @Column(name = "acce_value")
     private double acce_value;
 
-    public double getAcce_value() {
+    @Column(name = "baro_value")
+    private double baro_value;
+
+    public double getBaro() {
+        return baro_value;
+    }
+
+    public double getAcce() {
         return acce_value;
     }
 }

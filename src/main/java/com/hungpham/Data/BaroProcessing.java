@@ -41,8 +41,14 @@ public class BaroProcessing implements Runnable {
     public void run() {
         while (true) {
             readRaw();
+            String b = Double.toString(baro);
             System.out.println("Barometer value:  " + baro);
-            utils.TCPSend("localhost", Definitions.GRAPH_BARO_PORT, Double.toString(baro));
+            if (baro < 600) {
+
+            } else {
+                utils.TCPSend("localhost", Definitions.GRAPH_BARO_PORT, b);
+                utils.TCPSend("localhost", Definitions.DATABASE_BARO_PORT, b);
+            }
         }
     }
 }

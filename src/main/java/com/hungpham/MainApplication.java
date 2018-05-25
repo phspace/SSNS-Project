@@ -32,10 +32,11 @@ public class MainApplication extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         Button stopButton = new Button("Stop Everything!");
-        stopButton.setMinSize(200,100);
+        stopButton.setMinSize(200, 80);
 
         stopButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override public void handle(ActionEvent e) {
+            @Override
+            public void handle(ActionEvent e) {
                 command = "stop";
             }
         });
@@ -47,7 +48,7 @@ public class MainApplication extends Application {
         FlowPane root = new FlowPane();
         root.getChildren().addAll(lc, lc1, stopButton);
 
-        Scene scene = new Scene(root, 1280, 900);
+        Scene scene = new Scene(root, 1280, 720);
 
         primaryStage.setTitle("SSNS Project");
         primaryStage.setScene(scene);

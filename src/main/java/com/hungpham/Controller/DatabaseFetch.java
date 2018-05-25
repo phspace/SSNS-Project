@@ -1,15 +1,13 @@
 package com.hungpham.Controller;
 
-import com.hungpham.database.AccelerometerPoint;
+import com.hungpham.database.SensorsPoint;
 import com.hungpham.database.DatabaseConnector;
-import org.influxdb.InfluxDB;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class DatabaseFetch {
     private DatabaseConnector database;
-    private LinkedList<AccelerometerPoint> valueList;
+    private LinkedList<SensorsPoint> valueList;
 
     public DatabaseFetch() {
         database = new DatabaseConnector();
@@ -25,7 +23,7 @@ public class DatabaseFetch {
         valueList = database.readDB(LIMIT);
     }
 
-    public LinkedList<AccelerometerPoint> getValueList() {
+    public LinkedList<SensorsPoint> getValueList() {
         return valueList;
     }
 

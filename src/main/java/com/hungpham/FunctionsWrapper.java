@@ -6,15 +6,15 @@ import com.hungpham.Controller.SerialPortController;
 import com.hungpham.Data.AcceProcessing;
 import com.hungpham.Data.BaroProcessing;
 import com.hungpham.Data.DataFactory;
-import com.hungpham.database.AccelerometerPoint;
+import com.hungpham.database.SensorsPoint;
 
 public class FunctionsWrapper {
 
     public static void readFromDBExample() {
         DatabaseFetch fetch = new DatabaseFetch();
         fetch.readDataInTimeInterval("2018-05-19T13:33:58Z", "2018-05-19T13:34:01.766Z");
-        for (AccelerometerPoint a : fetch.getValueList()) {
-            System.out.println(a.getAcce_value());
+        for (SensorsPoint a : fetch.getValueList()) {
+            System.out.println(a.getAcce());
         }
 
     }
@@ -42,9 +42,14 @@ public class FunctionsWrapper {
         baroThread.start(); // comment this line if not use
 
         // write to database
-        DatabasePush push = new DatabasePush();
-        Thread pushDB = new Thread(push);
-        pushDB.start(); // comment this line if not use
+        DatabasePush pushAcce = new DatabasePush("acce");
+        Thread pushAcceDB = new Thread(pushAcce);
+        pushAcceDB.start(); // comment this line if not use
+
+        // write to database
+        DatabasePush pushBaro = new DatabasePush("baro");
+        Thread pushBaroDB = new Thread(pushBaro);
+        pushBaroDB.start(); // comment this line if not use
 
     }
 

@@ -8,13 +8,13 @@ public class AcceGraph extends RTGraph {
     private AddToQueue addToQueue;
 
     public AcceGraph() {
-        init("Accelerometer Data");
+        init("Accelerometer Data", -1, 9, 0.5);
     }
 
     private class AddToQueue implements Runnable {
         public void run() {
             // add a item of random data to queue
-            String acce = utils.TCPReceive(Definitions.GRAPH_BARO_PORT);
+            String acce = utils.TCPReceive(Definitions.GRAPH_ACCE_PORT);
             dataQ.add(Double.parseDouble(acce));
             executor.execute(this);
         }
