@@ -9,8 +9,5 @@
         <module name="SSNS-Project" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="SSNS-Project" target="8" />
-    </bytecodeTargetLevel>
   </component>
 </project>
