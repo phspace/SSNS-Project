@@ -8,7 +8,7 @@ public class BaroGraph extends RTGraph {
     private AddToQueue addToQueue;
 
     public BaroGraph() {
-        init("Barometer Data", 1006, 1011, 0.05);
+        init("Barometer Data", 1007.5, 1009.5, 0.05);
     }
 
     private class AddToQueue implements Runnable {
