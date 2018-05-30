@@ -31,7 +31,7 @@ public class BaroProcessing implements Runnable {
     public void run() {
         while (true) {
             readData();
-            System.out.println("Barometer value:  " + rawData);
+            //System.out.println("Barometer value:  " + rawData);
         }
     }
 }

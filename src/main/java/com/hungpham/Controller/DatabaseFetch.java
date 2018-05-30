@@ -20,9 +20,18 @@ public class DatabaseFetch {
         valueList = database.readDB(from, to);
     }
 
+    public void readDataInTimeInterval1(String from, String to) {
+        valueList = database.readDB1(from, to);
+    }
+
     //controller for reading most recent item from database
     public void readDataMostRecent(int LIMIT) {
         valueList = database.readDB(LIMIT);
+    }
+
+    //controller for reading most recent item from now() from database
+    public void readDataMostRecentfromNow(String elapseTime) {
+        valueList = database.readDB(elapseTime);
     }
 
     public LinkedList<AccelerometerPoint> getValueList() {

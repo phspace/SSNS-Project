@@ -9,6 +9,7 @@ import com.hungpham.Data.DataFactory;
 import com.hungpham.UI.RTGraph;
 import com.hungpham.UI.UI;
 import com.hungpham.database.AccelerometerPoint;
+import com.hungpham.Algorithms.ThresholdBasedVer1;
 
 import javax.xml.crypto.Data;
 
@@ -19,9 +20,12 @@ public class Main {
 
         // please run the TestGraph2 main method
 
-        //startEverything(); // comment this line to not start measuring and record to database
+        startEverything(); // comment this line to not start measuring and record to database
 
         //readFromDBExample(); // comment this to not read data from database
+
+
+
     }
 
     public static void readFromDBExample() {
@@ -63,6 +67,13 @@ public class Main {
         DatabasePush push = new DatabasePush();
         Thread pushDB = new Thread(push);
         pushDB.start(); // comment this line if not use
+
+        ThresholdBasedVer1 Algorithm1 = new ThresholdBasedVer1(2, 0.5);
+        Thread Algorithm1Thread = new Thread(Algorithm1);
+        Algorithm1Thread.start();
+
+        runGraph();
+
 
     }
 

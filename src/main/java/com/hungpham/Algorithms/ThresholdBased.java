@@ -2,6 +2,8 @@ package com.hungpham.Algorithms;
 import com.hungpham.Controller.DatabaseFetch;
 import com.hungpham.database.AccelerometerPoint;
 
+import java.time.Instant;
+
 
 public class ThresholdBased implements Runnable{
 
@@ -12,13 +14,11 @@ public class ThresholdBased implements Runnable{
     double UTV; //upper threshold value
     double LTV; //lower threshold value
 
-
     public ThresholdBased(int LIMIT, double UTV, double LTV) {
         this.LIMIT = LIMIT;
         this.UTV = UTV;
         this.LTV = LTV;
     }
-
 
     public void fetchMostRecentAcceValue(){
         fetch.readDataMostRecent(LIMIT);
@@ -31,7 +31,11 @@ public class ThresholdBased implements Runnable{
 
     public boolean findValueUnderLTV(){
         for (AccelerometerPoint a : fetch.getValueList()) {
-            if (a.getAcce_value() <= LTV) return true;
+            if (a.getAcce_value() <= LTV)  {
+                Instant time = a.getTimeStamp();
+                time.getEpochSecond();
+                return true;
+            }
         }
         return false;
     }

@@ -46,7 +46,7 @@ public class SerialPortController implements Runnable, SerialPortEventListener {
             defaultPort = "/dev/ttyS0";
         } else if (osname.startsWith("mac")) {
             // mac
-            defaultPort = "/dev/tty.usbmodemL1000051";
+            defaultPort = "/dev/tty.usbmodemL1000621";
         } else {
             System.out.println("Sorry, your operating system is not supported");
             return;

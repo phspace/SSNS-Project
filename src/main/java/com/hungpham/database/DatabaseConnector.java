@@ -48,8 +48,28 @@ public class DatabaseConnector {
     }
 
     // this method create new query to take most recent values from database
-    public LinkedList<AccelerometerPoint> readDB(int LIMIT) {
+    public LinkedList<AccelerometerPoint> readDB(long LIMIT) {
         String qu = "select acce_value from accelerometer ORDER BY time DESC LIMIT " + LIMIT;
+        Query q = new Query(qu, "ssns");
+        QueryResult queryResult = database.query(q);
+        InfluxDBResultMapper resultMapper = new InfluxDBResultMapper();
+        List<AccelerometerPoint> accelerometerPointsPointList = resultMapper.toPOJO(queryResult, AccelerometerPoint.class);
+        return (LinkedList<AccelerometerPoint>) accelerometerPointsPointList;
+    }
+
+    // this method create new query to take values from database zwischen now() and now() - elapseTime
+    public LinkedList<AccelerometerPoint> readDB(String elapseTime) {
+        String qu = String.format("select * from accelerometer where time >= (now() - %s) and time < now()", elapseTime);
+        Query q = new Query(qu, "ssns");
+        QueryResult queryResult = database.query(q);
+        InfluxDBResultMapper resultMapper = new InfluxDBResultMapper();
+        List<AccelerometerPoint> accelerometerPointsPointList = resultMapper.toPOJO(queryResult, AccelerometerPoint.class);
+        return (LinkedList<AccelerometerPoint>) accelerometerPointsPointList;
+    }
+
+    // dung timestamp format
+    public LinkedList<AccelerometerPoint> readDB1(String fromTime, String toTime) {
+        String qu = "select * from accelerometer where time >= " + fromTime + " and time < " + toTime;
         Query q = new Query(qu, "ssns");
         QueryResult queryResult = database.query(q);
         InfluxDBResultMapper resultMapper = new InfluxDBResultMapper();

@@ -17,4 +17,7 @@ public class AccelerometerPoint {
     public double getAcce_value() {
         return acce_value;
     }
+    public Instant getTimeStamp() {
+        return time;
+    }
 }
