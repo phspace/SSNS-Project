@@ -32,10 +32,10 @@ public class AcceProcessing implements Runnable {
     }
 
     private void readRaw() {
-        ArrayList<String> hexList = null;
+        //ArrayList<String> hexList = null;
         String received = utils.TCPReceive(Definitions.RECEIVING_ACC_VALUE_PORT);
 
-        hexList = utils.seperate4Hex(received);
+        ArrayList<String> hexList = utils.seperate4Hex(received);
 
         int i = 0;
         for (String s : hexList) {
