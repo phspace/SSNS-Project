@@ -148,7 +148,7 @@ public class SerialPortController implements Runnable, SerialPortEventListener {
         executeControlHex("runSensor");
         mode = 1;
         while (true) {
-            if (MainApplication.command.equalsIgnoreCase("stop")) {
+            if (MainApplication.command.equalsIgnoreCase("stop") || mode == 0) {
                 mode = 0;
                 break;
             }

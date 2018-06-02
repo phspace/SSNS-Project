@@ -3,6 +3,8 @@ package com.hungpham.Algorithms;
 
 import com.hungpham.Controller.DatabaseFetch;
 import java.time.Instant;
+
+import com.hungpham.Controller.SerialPortController;
 import com.hungpham.database.SensorsPoint;
 import java.util.Objects;
 
@@ -62,8 +64,10 @@ public class ThresholdBased implements Runnable{
                     if(findValueUnderLTV())
                     {
                         System.out.println("************FALL-DETECTED!************");
+                        SerialPortController.mode = 0;
                     }
                 }
+                System.out.println("Detecting fall....");
                 Thread.sleep(1000);
             }catch (Exception e) {
                 e.printStackTrace();
