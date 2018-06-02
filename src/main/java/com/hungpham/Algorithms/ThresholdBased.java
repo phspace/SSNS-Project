@@ -67,7 +67,6 @@ public class ThresholdBased implements Runnable{
                         SerialPortController.mode = 0;
                     }
                 }
-                System.out.println("Detecting fall....");
                 Thread.sleep(1000);
             }catch (Exception e) {
                 e.printStackTrace();
