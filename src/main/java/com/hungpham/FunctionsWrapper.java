@@ -1,5 +1,6 @@
 package com.hungpham;
 
+import com.hungpham.Algorithms.ThresholdBased;
 import com.hungpham.Controller.DatabaseFetch;
 import com.hungpham.Controller.DatabasePush;
 import com.hungpham.Controller.SerialPortController;
@@ -50,6 +51,10 @@ public class FunctionsWrapper {
         DatabasePush pushBaro = new DatabasePush("baro");
         Thread pushBaroDB = new Thread(pushBaro);
         pushBaroDB.start(); // comment this line if not use
+
+        ThresholdBased Algorithm1 = new ThresholdBased(2, 0.5);
+        Thread Algorithm1Thread = new Thread(Algorithm1);
+        Algorithm1Thread.start();
 
     }
 

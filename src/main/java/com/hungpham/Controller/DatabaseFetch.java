@@ -18,13 +18,13 @@ public class DatabaseFetch {
         valueList = database.readDB(from, to);
     }
 
-    //controller for reading most recent item from database
-    public void readDataMostRecent(int LIMIT) {
-        valueList = database.readDB(LIMIT);
-    }
-
     public LinkedList<SensorsPoint> getValueList() {
         return valueList;
+    }
+
+    //controller for reading most recent item from now() from database
+    public void readDataMostRecentfromNow(int elapseTime) {
+        valueList = database.readDB("(now() - " + elapseTime + "s)", "now()");
     }
 
 }

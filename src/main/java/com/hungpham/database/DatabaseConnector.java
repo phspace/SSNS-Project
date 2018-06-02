@@ -39,17 +39,7 @@ public class DatabaseConnector {
     }
 
     public LinkedList<SensorsPoint> readDB(String fromTime, String toTime) {
-        String qu = "select * from accelerometer where time >= '" + fromTime + "' and time < '" + toTime + "'";
-        Query q = new Query(qu, "ssns");
-        QueryResult queryResult = database.query(q);
-        InfluxDBResultMapper resultMapper = new InfluxDBResultMapper();
-        List<SensorsPoint> sensorsPointsPointList = resultMapper.toPOJO(queryResult, SensorsPoint.class);
-        return (LinkedList<SensorsPoint>) sensorsPointsPointList;
-    }
-
-    // this method create new query to take most recent values from database
-    public LinkedList<SensorsPoint> readDB(int LIMIT) {
-        String qu = "select acce_value from accelerometer ORDER BY time DESC LIMIT " + LIMIT;
+        String qu = "select * from ssnsproject where time >= '" + fromTime + "' and time < '" + toTime + "'";
         Query q = new Query(qu, "ssns");
         QueryResult queryResult = database.query(q);
         InfluxDBResultMapper resultMapper = new InfluxDBResultMapper();

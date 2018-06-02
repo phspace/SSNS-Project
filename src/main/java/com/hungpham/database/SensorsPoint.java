@@ -24,4 +24,8 @@ public class SensorsPoint {
     public double getAcce() {
         return acce_value;
     }
+
+    public Instant getTime() {
+        return time;
+    }
 }
