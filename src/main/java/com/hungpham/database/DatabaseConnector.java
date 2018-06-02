@@ -39,7 +39,7 @@ public class DatabaseConnector {
     }
 
     public LinkedList<SensorsPoint> readDB(String fromTime, String toTime) {
-        String qu = "select * from ssnsproject where time >= '" + fromTime + "' and time < '" + toTime + "'";
+        String qu = "select * from ssnsproject where time >= " + fromTime + " and time < " + toTime;
         Query q = new Query(qu, "ssns");
         QueryResult queryResult = database.query(q);
         InfluxDBResultMapper resultMapper = new InfluxDBResultMapper();
