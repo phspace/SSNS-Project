@@ -11,15 +11,6 @@ import com.hungpham.database.SensorsPoint;
 
 public class FunctionsWrapper {
 
-    public static void readFromDBExample() {
-        DatabaseFetch fetch = new DatabaseFetch();
-        fetch.readDataInTimeInterval("'2018-05-19T13:33:58Z'", "'2018-05-19T13:34:01.766Z'");
-        for (SensorsPoint a : fetch.getValueList()) {
-            System.out.println(a.getAcce());
-        }
-
-    }
-
     public static void startEverything() {
         // comment to turn off any function
 
