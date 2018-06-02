@@ -3,11 +3,8 @@ package com.hungpham.Algorithms;
 
 import com.hungpham.Controller.DatabaseFetch;
 import java.time.Instant;
-
 import com.hungpham.Controller.SerialPortController;
 import com.hungpham.database.SensorsPoint;
-import java.util.Objects;
-
 
 public class ThresholdBased implements Runnable{
     private DatabaseFetch fetch = new DatabaseFetch();
@@ -52,7 +49,6 @@ public class ThresholdBased implements Runnable{
         return false;
     }
 
-
     public void run() {
         while (true) {
             try
@@ -71,11 +67,7 @@ public class ThresholdBased implements Runnable{
             }catch (Exception e) {
                 e.printStackTrace();
             }
-
-
         }
     }
-
-
 }
 
