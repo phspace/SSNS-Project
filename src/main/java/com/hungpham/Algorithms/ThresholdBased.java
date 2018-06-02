@@ -24,7 +24,7 @@ public class ThresholdBased implements Runnable{
     }
 
     public void fetchAccePointAtCurrentSystemTime(){
-        fetch.readDataMostRecentfromNow(2);
+        fetch.readAcceMostRecentfromNow(2);
     }
 
     public void fetchAccePointBeforeTimestamp(long timeStamp){

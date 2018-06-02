@@ -38,15 +38,6 @@ public class DatabaseConnector {
         database.write(point);
     }
 
-    public LinkedList<SensorsPoint> readDB(String fromTime, String toTime) {
-        String qu = "select * from ssnsproject where time >= " + fromTime + " and time < " + toTime;
-        Query q = new Query(qu, "ssns");
-        QueryResult queryResult = database.query(q);
-        InfluxDBResultMapper resultMapper = new InfluxDBResultMapper();
-        List<SensorsPoint> sensorsPointsPointList = resultMapper.toPOJO(queryResult, SensorsPoint.class);
-        return (LinkedList<SensorsPoint>) sensorsPointsPointList;
-    }
-
     public LinkedList<SensorsPoint> readDB(String typeValue, String fromTime, String toTime) {
         String qu = "select " + typeValue + " from ssnsproject where time >= " + fromTime + " and time < " + toTime;
         Query q = new Query(qu, "ssns");
