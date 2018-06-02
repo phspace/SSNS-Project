@@ -24,19 +24,22 @@ public class DatabaseFetch {
         valueList = database.readDB("acce_value","(now() - " + elapseTime + "s)", "now()");
     }
 
-    public void readBaroInTimeInterval(String from, String to) {
+    public LinkedList<SensorsPoint> readBaroInTimeInterval(String from, String to) {
         valueList.clear();
         valueList = database.readDB("baro_value", from, to);
+        return valueList;
     }
 
-    public void readAcceInTimeInterval(String from, String to) {
+    public LinkedList<SensorsPoint> readAcceInTimeInterval(String from, String to) {
         valueList.clear();
         valueList = database.readDB("acce_value", from, to);
+        return valueList;
     }
 
-    public void readDataInTimeInterval(String from, String to) {
+    public LinkedList<SensorsPoint> readDataInTimeInterval(String from, String to) {
         valueList.clear();
         valueList = database.readDB("*", from, to);
+        return valueList;
     }
 
 }
