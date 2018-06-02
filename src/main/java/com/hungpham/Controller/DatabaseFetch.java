@@ -27,4 +27,12 @@ public class DatabaseFetch {
         valueList = database.readDB("(now() - " + elapseTime + "s)", "now()");
     }
 
+    public void readBaroInTimeInterval(String from, String to) {
+        valueList = database.readDB("baro_value", from, to);
+    }
+
+    public void readAcceInTimeInterval(String from, String to) {
+        valueList = database.readDB("acce_value", from, to);
+    }
+
 }

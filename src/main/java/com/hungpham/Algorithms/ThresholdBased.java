@@ -29,7 +29,7 @@ public class ThresholdBased implements Runnable{
 
     public void fetchAccePointBeforeTimestamp(long timeStamp){
         //String s = Objects.toString(timeStamp, null);
-        fetch.readDataInTimeInterval(timeStamp + "s - 2s", timeStamp + "s");
+        fetch.readAcceInTimeInterval(timeStamp + "s - 2s", timeStamp + "s");
     }
 
     public boolean findValueOverUTV(){
