@@ -24,7 +24,7 @@ public class DatabaseFetch {
         valueList = database.readDB("acce_value","(now() - " + elapseTime + "s)", "now()");
     }
 
-    public LinkedList<SensorsPoint> readBaroInTimeInterval(long UTVtimestamp , int i) {
+    public LinkedList<SensorsPoint> readBaroInTimeInterval(long UTVtimestamp) {
         valueList.clear();
         valueList = database.readDB("baro_value", UTVtimestamp+"-3s",UTVtimestamp+"+3s" );
         return valueList;
