@@ -108,11 +108,12 @@ public class SerialPortController implements Runnable, SerialPortEventListener {
     }
 
     public synchronized void serialEvent(SerialPortEvent event) {
-        if (event.getEventType() == SerialPortEvent.DATA_AVAILABLE) {
+        //if (event.getEventType() == SerialPortEvent.DATA_AVAILABLE) {
             //System.out.println("Data available: ");
             byte[] readBuffer = new byte[64];
             try {
                 while (inputStream.available() > 0) {
+                    readBuffer = new byte[inputStream.available()];
                     int numBytes = inputStream.read(readBuffer);
                 }
                 data = utils.bytesToHexString(readBuffer);
@@ -121,13 +122,13 @@ public class SerialPortController implements Runnable, SerialPortEventListener {
                      * add data to a queue for the data notifier SensorData to update new value
                      * and notify observers
                      */
-                    utils.TCPSend("localhost", Definitions.RECEIVING_SENSOR_VALUE_PORT, data);
+                    //utils.TCPSend("localhost", Definitions.RECEIVING_SENSOR_VALUE_PORT, data);
                 }
-                //System.out.println(data);
+                System.out.println(data);
             } catch (IOException ioe) {
                 System.out.println("Exception " + ioe);
             }
-        }
+        //}
     }
 
     private void executeControlHex(String path) {

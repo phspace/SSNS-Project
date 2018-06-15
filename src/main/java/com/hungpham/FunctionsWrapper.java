@@ -44,7 +44,7 @@ public class FunctionsWrapper {
         pushBaroDB.start(); // comment this line if not use
 
         // run fall detection algorithm
-        ThresholdBased Algorithm1 = new ThresholdBased(4, 0.4);
+        ThresholdBased Algorithm1 = new ThresholdBased(10, 0);
         Thread Algorithm1Thread = new Thread(Algorithm1);
         Algorithm1Thread.start();
 

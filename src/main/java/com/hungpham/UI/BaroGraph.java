@@ -17,6 +17,8 @@ public class BaroGraph extends RTGraph {
             String accz = utils.TCPReceive(Definitions.GRAPH_BARO_PORT);
             dataQ.add(Double.parseDouble(accz));
             executor.execute(this);
+            yAxis.setUpperBound(Double.parseDouble(accz) + 1);
+            yAxis.setLowerBound(Double.parseDouble(accz) - 1);
         }
     }
 
