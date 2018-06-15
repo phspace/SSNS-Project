@@ -16,7 +16,7 @@ public class KhoaFilter {
 
     public double[] pullFromDB() {
         // get barometer values in the most recent 2 seconds
-        baro_values = fetch.readBaroInTimeInterval("(now() - " + 2 + "s)", "now()");
+        //baro_values = fetch.readBaroInTimeInterval("(now() - " + 2 + "s)", "now()");
 
         double[] rawdata = new double[baro_values.size()];
         int i = 0;
