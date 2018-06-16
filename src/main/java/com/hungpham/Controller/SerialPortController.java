@@ -115,16 +115,18 @@ public class SerialPortController implements Runnable, SerialPortEventListener {
                 while (inputStream.available() > 0) {
                     readBuffer = new byte[inputStream.available()];
                     int numBytes = inputStream.read(readBuffer);
+
+                    data = utils.bytesToHexString(readBuffer);
+                    if (mode == 1) {
+                        /**
+                         * add data to a queue for the data notifier SensorData to update new value
+                         * and notify observers
+                         */
+                        //utils.TCPSend("localhost", Definitions.RECEIVING_SENSOR_VALUE_PORT, data);
+                        System.out.println(data);
+                    }
+
                 }
-                data = utils.bytesToHexString(readBuffer);
-                if (mode == 1) {
-                    /**
-                     * add data to a queue for the data notifier SensorData to update new value
-                     * and notify observers
-                     */
-                    //utils.TCPSend("localhost", Definitions.RECEIVING_SENSOR_VALUE_PORT, data);
-                }
-                System.out.println(data);
             } catch (IOException ioe) {
                 System.out.println("Exception " + ioe);
             }
@@ -136,7 +138,7 @@ public class SerialPortController implements Runnable, SerialPortEventListener {
         for (String s : strings) {
             write(s);
             try {
-                Thread.sleep(2000);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -147,6 +149,11 @@ public class SerialPortController implements Runnable, SerialPortEventListener {
         initWrite();
         executeControlHex("autoConnectHex.txt");
         executeControlHex("runSensor");
+        try {
+            Thread.sleep(4000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         mode = 1;
         while (true) {
             if (MainApplication.command.equalsIgnoreCase("stop") || mode == 0) {
