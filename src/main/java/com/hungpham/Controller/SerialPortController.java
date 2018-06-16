@@ -108,7 +108,7 @@ public class SerialPortController implements Runnable, SerialPortEventListener {
     }
 
     public synchronized void serialEvent(SerialPortEvent event) {
-        //if (event.getEventType() == SerialPortEvent.DATA_AVAILABLE) {
+        if (event.getEventType() == SerialPortEvent.DATA_AVAILABLE) {
             //System.out.println("Data available: ");
             byte[] readBuffer = new byte[64];
             try {
@@ -128,7 +128,7 @@ public class SerialPortController implements Runnable, SerialPortEventListener {
             } catch (IOException ioe) {
                 System.out.println("Exception " + ioe);
             }
-        //}
+        }
     }
 
     private void executeControlHex(String path) {
@@ -136,7 +136,7 @@ public class SerialPortController implements Runnable, SerialPortEventListener {
         for (String s : strings) {
             write(s);
             try {
-                Thread.sleep(200);
+                Thread.sleep(2000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -156,6 +156,7 @@ public class SerialPortController implements Runnable, SerialPortEventListener {
         }
         executeControlHex("autoDisconnectHex");
         System.exit(0);
+
     }
 
 }
