@@ -38,6 +38,15 @@ public class DatabaseConnector {
         database.write(point);
     }
 
+    public void writeDB(String field, Double data, String conn) {
+        Point point = Point.measurement("ssnsproject")
+                .time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
+                .addField(field, data)
+                .addField("conn", conn)
+                .build();
+        database.write(point);
+    }
+
     public LinkedList<SensorsPoint> readDB(String typeValue, String fromTime, String toTime) {
         String qu = "select " + typeValue + " from ssnsproject where time >= " + fromTime + " and time < " + toTime;
         Query q = new Query(qu, "ssns");

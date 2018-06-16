@@ -4,26 +4,41 @@ import com.hungpham.Controller.Definitions;
 import com.hungpham.Utils.Utils;
 
 import java.util.ArrayList;
+import java.util.concurrent.LinkedBlockingQueue;
+
+import static com.hungpham.Controller.DatabasePush.baroDBQueue;
 
 public class BaroProcessing implements Runnable {
     private Utils utils;
     private String rawData;
     private double baro;
-    private double[] filtered;
 
-    public BaroProcessing() {
+    public static volatile LinkedBlockingQueue<String>[] baroQueue = new LinkedBlockingQueue[2];
+
+    private int conn;
+
+    public BaroProcessing(int conn) {
         utils = new Utils();
         rawData = null;
+        this.conn = conn;
+        baroQueue[conn] = new LinkedBlockingQueue<>();
     }
 
     private void readRaw() {
         ArrayList<String> hexList = null;
-        String received = utils.TCPReceive(Definitions.RECEIVING_BAR_VALUE_PORT);
+//        String received = utils.TCPReceive(Definitions.RECEIVING_BAR_VALUE_PORT + conn);
 
-        hexList = utils.seperate2Hex(received);
+        String received = null;
+        try {
+            received = baroQueue[conn].take();
+            hexList = utils.seperate2Hex(received);
 
-        String reversed = hexList.get(2) + hexList.get(1) + hexList.get(0);
-        baro = utils.hexStringToInt(reversed) / 100.0;
+            String reversed = hexList.get(2) + hexList.get(1) + hexList.get(0);
+            baro = utils.hexStringToInt(reversed);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
     }
 
     /**
@@ -42,13 +57,11 @@ public class BaroProcessing implements Runnable {
         while (true) {
             readRaw();
             String b = Double.toString(baro);
-            System.out.println("Barometer value:  " + baro);
-            if (baro < 600) {
+            //System.out.println("Barometer value: conn: " + conn + "    " + baro);
+            baroDBQueue[conn].add(conn + b);
+            // utils.TCPSend("localhost", Definitions.GRAPH_BARO_PORT, b);
+//             utils.TCPSend("localhost", Definitions.DATABASE_BARO_PORT + conn, conn + b);
 
-            } else {
-                utils.TCPSend("localhost", Definitions.GRAPH_BARO_PORT, b);
-                utils.TCPSend("localhost", Definitions.DATABASE_BARO_PORT, b);
-            }
         }
     }
 }

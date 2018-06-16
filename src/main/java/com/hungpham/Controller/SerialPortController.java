@@ -1,5 +1,6 @@
 package com.hungpham.Controller;
 
+import com.hungpham.Data.SerialData;
 import com.hungpham.MainApplication;
 import com.hungpham.Utils.Utils;
 import gnu.io.*;
@@ -9,6 +10,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.TooManyListenersException;
+
+import static com.hungpham.Controller.Definitions.OS_NAME;
 
 /**
  * Main control class for Serial port
@@ -22,28 +25,34 @@ public class SerialPortController implements Runnable, SerialPortEventListener {
     private static CommPortIdentifier portID;
     private Utils utils;
 
+    private SerialData serialData;
+
     public static volatile int mode = 0;
 
     private Thread writeThread;
 
     private String data;
 
+    private String firstPackage = "";
+    private String secondPackage = "";
+    private String completePackage = "";
+
     public SerialPortController() {
         data = null;
         utils = new Utils();
         init();
+        serialData = new SerialData();
     }
 
     private void init() {
-        String osname = System.getProperty("os.name", "").toLowerCase();
         String defaultPort = null;
-        if (osname.startsWith("windows")) {
+        if (OS_NAME.startsWith("windows")) {
             // windows
             defaultPort = "COM3";
-        } else if (osname.startsWith("linux")) {
+        } else if (OS_NAME.startsWith("linux")) {
             // linux
             defaultPort = "/dev/ttyS0";
-        } else if (osname.startsWith("mac")) {
+        } else if (OS_NAME.startsWith("mac")) {
             // mac
             defaultPort = "/dev/tty.usbmodemL1000051";
         } else {
@@ -109,24 +118,43 @@ public class SerialPortController implements Runnable, SerialPortEventListener {
 
     public synchronized void serialEvent(SerialPortEvent event) {
         if (event.getEventType() == SerialPortEvent.DATA_AVAILABLE) {
-            //System.out.println("Data available: ");
-            byte[] readBuffer = new byte[64];
             try {
                 while (inputStream.available() > 0) {
-                    readBuffer = new byte[inputStream.available()];
-                    int numBytes = inputStream.read(readBuffer);
-
+                    byte[] readBuffer = new byte[inputStream.available()];
+                    inputStream.read(readBuffer);
                     data = utils.bytesToHexString(readBuffer);
                     if (mode == 1) {
                         /**
                          * add data to a queue for the data notifier SensorData to update new value
                          * and notify observers
                          */
-                        //utils.TCPSend("localhost", Definitions.RECEIVING_SENSOR_VALUE_PORT, data);
-                        System.out.println(data);
-                    }
 
+                        if (OS_NAME.startsWith("windows")) {
+                            // windows
+                            System.out.println(data);
+                        } else if (OS_NAME.startsWith("linux")) {
+                            // linux
+                        } else if (OS_NAME.startsWith("mac")) {
+                            /** package for mac os */
+
+                            if (data.length() == 16) {
+                                firstPackage = data;
+                            }
+                            if (firstPackage.length() == 16 && data.length() > 16) {
+                                secondPackage = data;
+                                completePackage = firstPackage + secondPackage;
+                                SerialData.dataPackage.add(completePackage);
+                                firstPackage = "";
+                                secondPackage = "";
+                                //System.out.println(completePackage);
+                            }
+                        } else {
+                            System.out.println("Sorry, your operating system is not supported");
+                            return;
+                        }
+                    }
                 }
+
             } catch (IOException ioe) {
                 System.out.println("Exception " + ioe);
             }
@@ -138,7 +166,7 @@ public class SerialPortController implements Runnable, SerialPortEventListener {
         for (String s : strings) {
             write(s);
             try {
-                Thread.sleep(1000);
+                Thread.sleep(1500);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -150,7 +178,7 @@ public class SerialPortController implements Runnable, SerialPortEventListener {
         executeControlHex("autoConnectHex.txt");
         executeControlHex("runSensor");
         try {
-            Thread.sleep(4000);
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

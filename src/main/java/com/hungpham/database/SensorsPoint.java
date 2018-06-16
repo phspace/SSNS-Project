@@ -17,8 +17,15 @@ public class SensorsPoint {
     @Column(name = "baro_value")
     private double baro_value;
 
+    @Column(name = "conn")
+    private String conn;
+
     public double getBaro() {
         return baro_value;
+    }
+
+    public String getConn() {
+        return conn;
     }
 
     public double getAcce() {
