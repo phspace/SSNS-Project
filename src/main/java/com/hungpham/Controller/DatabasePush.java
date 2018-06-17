@@ -13,6 +13,7 @@ public class DatabasePush implements Runnable {
     private String dest;
     private int port;
 
+    // queues for
     public static volatile LinkedBlockingQueue<String>[] acceDBQueue = new LinkedBlockingQueue[2];
     public static volatile LinkedBlockingQueue<String>[] baroDBQueue = new LinkedBlockingQueue[2];
 
@@ -57,6 +58,7 @@ public class DatabasePush implements Runnable {
     }
 
     public void pushToDB() {
+        // push all accelerometer axes to database
         if (dest.equalsIgnoreCase("acce_value")) {
             int[] loc = new int[3];
             int j = 0;
