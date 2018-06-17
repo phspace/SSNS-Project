@@ -46,7 +46,7 @@ public abstract class RTGraph {
         lineChart.setAnimated(false);
         lineChart.setId("SSNSLiveChart");
         lineChart.setTitle(nameChart);
-        lineChart.setPrefSize(640, 640);
+        lineChart.setPrefSize(700, 450);
 
         //-- Chart Series
         series = new LineChart.Series<Number, Number>();

@@ -3,22 +3,34 @@ package com.hungpham.UI;
 import com.hungpham.Controller.Definitions;
 
 import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class BaroGraph extends RTGraph {
     private AddToQueue addToQueue;
 
-    public BaroGraph() {
-        init("Barometer Data", 1007.5, 1009.5, 0.05);
+    private int conn;
+
+    public static volatile LinkedBlockingQueue<String>[] baroGraph = new LinkedBlockingQueue[2];
+
+    public BaroGraph(int conn) {
+        this.conn = conn;
+        baroGraph[conn] = new LinkedBlockingQueue<>();
+        init("Barometer Data : " + conn, 9950, 10050, 5);
     }
 
     private class AddToQueue implements Runnable {
         public void run() {
             // add a item of random data to queue
-            String accz = utils.TCPReceive(Definitions.GRAPH_BARO_PORT);
-            dataQ.add(Double.parseDouble(accz));
+            String baro = null;
+            try {
+                baro = baroGraph[conn].take();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            dataQ.add(Double.parseDouble(baro));
             executor.execute(this);
-            yAxis.setUpperBound(Double.parseDouble(accz) + 1);
-            yAxis.setLowerBound(Double.parseDouble(accz) - 1);
+            yAxis.setUpperBound(Double.parseDouble(baro) + 50);
+            yAxis.setLowerBound(Double.parseDouble(baro) - 50);
         }
     }
 
