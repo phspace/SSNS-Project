@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import static com.hungpham.Controller.DatabasePush.acceDBQueue;
+import static com.hungpham.UI.AcceGraph.acceGraph;
 
 public class AcceProcessing implements Runnable {
 
@@ -77,14 +78,13 @@ public class AcceProcessing implements Runnable {
     public void printData() {
         for (int i = 0; i < 3; i++) {
             acce[i] = acce[i] / (32768 / 8);
-            //System.out.println("Accelerometer value: " + i + "   " + acce[i]);
         }
-        double acc_value = Math.sqrt(acce[0] * acce[0] + acce[1] * acce[1] + acce[2] * acce[2]);
-        String a = Double.toString(acc_value);
-        //System.out.println("Accelerometer sqrt: conn: " + conn + "  :  " + acc_value);
-        acceDBQueue[conn].add(conn + a);
-        //utils.TCPSend("localhost", Definitions.GRAPH_ACCE_PORT, a);
-//        utils.TCPSend("localhost", Definitions.DATABASE_ACCE_PORT + conn, conn + a);
+        double acceSQRT = Math.sqrt(acce[0] * acce[0] + acce[1] * acce[1] + acce[2] * acce[2]);
+        String a = Double.toString(acceSQRT);
+        String fullPackage = acce[0] + " " + acce[1] + " " + acce[2] + " " + a;
+//        fullPackage = a;
+        acceDBQueue[conn].add(fullPackage);
+        acceGraph[conn].add(a);
     }
 
     @Override

@@ -125,10 +125,9 @@ public class SerialPortController implements Runnable, SerialPortEventListener {
                     data = utils.bytesToHexString(readBuffer);
                     if (mode == 1) {
                         /**
-                         * add data to a queue for the data notifier SensorData to update new value
-                         * and notify observers
+                         * add data to a queue for
                          */
-
+//                        System.out.println(data);
                         if (OS_NAME.startsWith("windows")) {
                             // windows
                             System.out.println(data);
@@ -175,7 +174,12 @@ public class SerialPortController implements Runnable, SerialPortEventListener {
 
     public void run() {
         initWrite();
-        executeControlHex("autoConnectHex.txt");
+        executeControlHex("setup");
+        while (MainApplication.mode == 0) ;
+        executeControlHex("connect1");
+        if (MainApplication.mode == 2) {
+            executeControlHex("connect2");
+        }
         executeControlHex("runSensor");
         try {
             Thread.sleep(2000);

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import static com.hungpham.Controller.DatabasePush.baroDBQueue;
+import static com.hungpham.UI.BaroGraph.baroGraph;
 
 public class BaroProcessing implements Runnable {
     private Utils utils;
@@ -58,7 +59,8 @@ public class BaroProcessing implements Runnable {
             readRaw();
             String b = Double.toString(baro);
             //System.out.println("Barometer value: conn: " + conn + "    " + baro);
-            baroDBQueue[conn].add(conn + b);
+            baroDBQueue[conn].add(b);
+            baroGraph[conn].add(b);
             // utils.TCPSend("localhost", Definitions.GRAPH_BARO_PORT, b);
 //             utils.TCPSend("localhost", Definitions.DATABASE_BARO_PORT + conn, conn + b);
 

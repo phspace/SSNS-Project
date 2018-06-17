@@ -54,11 +54,24 @@ public class DatabasePush implements Runnable {
             default:
                 break;
         }
-        data = data.substring(1);
     }
 
     public void pushToDB() {
-        databaseConnector.writeDB(dest, Double.parseDouble(data), Integer.toString(conn));
+        if (dest.equalsIgnoreCase("acce_value")) {
+            int[] loc = new int[3];
+            int j = 0;
+            for (int i = -1; (i = data.indexOf(" ", i + 1)) != -1; i++) {
+                loc[j] = i;
+                j++;
+            }
+            double[] acce = new double[3];
+            acce[0] = Double.parseDouble(data.substring(0, loc[0]));
+            acce[1] = Double.parseDouble(data.substring(loc[0] + 1, loc[1]));
+            acce[2] = Double.parseDouble(data.substring(loc[1] + 1, loc[2]));
+            double acceSQRT = Double.parseDouble(data.substring(loc[2] + 1));
+            databaseConnector.writeAcceDB(dest, acceSQRT, Integer.toString(conn), acce);
+        } else
+            databaseConnector.writeDB(dest, Double.parseDouble(data), Integer.toString(conn));
     }
 
     @Override
