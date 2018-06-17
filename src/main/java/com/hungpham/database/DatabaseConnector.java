@@ -14,9 +14,11 @@ import java.util.concurrent.TimeUnit;
 
 public class DatabaseConnector {
     private InfluxDB database;
+    private int conn;
 
-    public DatabaseConnector() {
-        database = InfluxDBFactory.connect("http://localhost:8086", "ssns", "ssns-project");
+    public DatabaseConnector(int conn) {
+        this.conn = conn;
+        database = InfluxDBFactory.connect("http://localhost:8086", "ssns" + conn, "ssns");
         verifyDatabase();
     }
 
@@ -27,7 +29,7 @@ public class DatabaseConnector {
             System.out.println("Error pinging server.");
             return;
         }
-        database.setDatabase("ssns");
+        database.setDatabase("ssns" + conn);
     }
 
     public void writeDB(String field, Double data) {

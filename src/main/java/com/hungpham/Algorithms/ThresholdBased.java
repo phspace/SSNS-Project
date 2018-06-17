@@ -7,7 +7,7 @@ import com.hungpham.Controller.SerialPortController;
 import com.hungpham.database.SensorsPoint;
 
 public class ThresholdBased implements Runnable{
-    private DatabaseFetch fetch = new DatabaseFetch();
+    private DatabaseFetch fetch = new DatabaseFetch(0);
     private volatile boolean shutdown = false;
     private Long UTVtimestamp;
 

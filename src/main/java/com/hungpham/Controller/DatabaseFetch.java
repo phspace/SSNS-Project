@@ -8,9 +8,15 @@ import java.util.LinkedList;
 public class DatabaseFetch {
     private DatabaseConnector database;
     private LinkedList<SensorsPoint> valueList;
+    private int conn;
 
-    public DatabaseFetch() {
-        database = new DatabaseConnector();
+    /**
+     * when create new object of this class, remember to choose the database 0 or 1
+     * @param conn
+     */
+    public DatabaseFetch(int conn) {
+        this.conn = conn;
+        database = new DatabaseConnector(conn);
         valueList = new LinkedList<>();
     }
 

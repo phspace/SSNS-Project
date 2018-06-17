@@ -9,7 +9,7 @@ public class DatabasePush implements Runnable {
     private Utils utils;
     private String data;
     private int conn;
-    private DatabaseConnector databaseConnector;
+    private static DatabaseConnector[] databaseConnector = new DatabaseConnector[2];
     private String dest;
     private int port;
 
@@ -21,7 +21,7 @@ public class DatabasePush implements Runnable {
         this.conn = conn;
         utils = new Utils();
         data = null;
-        databaseConnector = new DatabaseConnector();
+        databaseConnector[conn] = new DatabaseConnector(conn);
         switch (dest) {
             case "acce":
                 this.dest = "acce_value";
@@ -71,9 +71,9 @@ public class DatabasePush implements Runnable {
             acce[1] = Double.parseDouble(data.substring(loc[0] + 1, loc[1]));
             acce[2] = Double.parseDouble(data.substring(loc[1] + 1, loc[2]));
             double acceSQRT = Double.parseDouble(data.substring(loc[2] + 1));
-            databaseConnector.writeAcceDB(dest, acceSQRT, Integer.toString(conn), acce);
+            databaseConnector[conn].writeAcceDB(dest, acceSQRT, Integer.toString(conn), acce);
         } else
-            databaseConnector.writeDB(dest, Double.parseDouble(data), Integer.toString(conn));
+            databaseConnector[conn].writeDB(dest, Double.parseDouble(data), Integer.toString(conn));
     }
 
     @Override
