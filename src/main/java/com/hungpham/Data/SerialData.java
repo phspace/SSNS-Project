@@ -76,7 +76,6 @@ public class SerialData implements Runnable {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-
                 }
 
                 for (int i = -1; (i = packages.indexOf(BARO_NOTIFY, i + 1)) != -1; i++) {

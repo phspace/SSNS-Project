@@ -59,8 +59,11 @@ public class BaroProcessing implements Runnable {
             readRaw();
             String b = Double.toString(baro);
             //System.out.println("Barometer value: conn: " + conn + "    " + baro);
-            baroDBQueue[conn].add(b);
-            baroGraph[conn].add(b);
+            if (baro > 120000 || baro < 90000) ;
+            else {
+                baroDBQueue[conn].add(b);
+                baroGraph[conn].add(b);
+            }
             // utils.TCPSend("localhost", Definitions.GRAPH_BARO_PORT, b);
 //             utils.TCPSend("localhost", Definitions.DATABASE_BARO_PORT + conn, conn + b);
 

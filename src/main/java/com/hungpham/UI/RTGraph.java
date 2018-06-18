@@ -72,6 +72,7 @@ public abstract class RTGraph {
     protected void addDataToSeries() {
         for (int i = 0; i < MAX_DATA_POINTS; i++) { //-- add 20 numbers to the plot+
             if (dataQ.isEmpty()) break;
+            if (xSeriesData > 1000) xSeriesData = 0;
             series.getData().add(new LineChart.Data(xSeriesData++, dataQ.remove()));
         }
         // remove points to keep us at no more than MAX_DATA_POINTS

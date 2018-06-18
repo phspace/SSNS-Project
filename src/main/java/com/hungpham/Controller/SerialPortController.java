@@ -60,7 +60,7 @@ public class SerialPortController implements Runnable, SerialPortEventListener {
             } else if (OS_NAME.startsWith("mac")) {
                 // mac
                 System.out.println("Launchpad 0 connecting");
-                defaultPort = "/dev/tty.usbmodemL1001651";
+                defaultPort = "/dev/tty.usbmodemL1000051";
             } else {
                 System.out.println("Sorry, your operating system is not supported");
                 return;
@@ -74,7 +74,7 @@ public class SerialPortController implements Runnable, SerialPortEventListener {
                 defaultPort = "/dev/ttyS0";
             } else if (OS_NAME.startsWith("mac")) {
                 // mac
-                defaultPort = "/dev/tty.usbmodemL1000051";
+                defaultPort = "/dev/tty.usbmodemL1001651";
                 System.out.println("Launchpad 1 connecting");
             } else {
                 System.out.println("Sorry, your operating system is not supported");
@@ -192,7 +192,7 @@ public class SerialPortController implements Runnable, SerialPortEventListener {
         for (String s : strings) {
             write(s);
             try {
-                Thread.sleep(500);
+                Thread.sleep(200);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
