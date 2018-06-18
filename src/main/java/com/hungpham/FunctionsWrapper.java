@@ -5,6 +5,7 @@ import com.hungpham.Controller.DatabasePush;
 import com.hungpham.Controller.SerialPortController;
 import com.hungpham.Data.AcceProcessing;
 import com.hungpham.Data.BaroProcessing;
+import sun.applet.Main;
 
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -13,7 +14,7 @@ public class FunctionsWrapper {
 
     public static void startEverything() {
         // comment to turn off any function
-
+System.out.println("Backend functions are starting...");
         // to run serial port read write
         RunSerialController t = new RunSerialController();
         t.start(); // comment this line if not use
@@ -69,7 +70,14 @@ public class FunctionsWrapper {
     static class RunSerialController extends Thread {
         @Override
         public void run() {
-            SerialPortController c = new SerialPortController();
+            while (MainApplication.mode == 0) ;
+            if (MainApplication.mode == 1) {
+                SerialPortController c = new SerialPortController(0);
+            } else if (MainApplication.mode == 2) {
+                System.out.println("Start 2 launchpad");
+                SerialPortController c = new SerialPortController(0);
+                SerialPortController c1 = new SerialPortController(1);
+            }
         }
     }
 

@@ -107,5 +107,9 @@ public class MainApplication extends Application {
     public static void main(String[] args) {
         FunctionsWrapper.startEverything();
         launch(args);
+        System.out.println("GUI started.");
+
+        while (mode != 3);
+        System.exit(0);
     }
 }

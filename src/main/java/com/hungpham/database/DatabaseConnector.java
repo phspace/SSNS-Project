@@ -70,4 +70,12 @@ public class DatabaseConnector {
         return (LinkedList<SensorsPoint>) sensorsPointsPointList;
     }
 
+    public LinkedList<SensorsPoint> executeQuery(String query) {
+        Query q = new Query(query, "ssns" + conn);
+        QueryResult queryResult = database.query(q);
+        InfluxDBResultMapper resultMapper = new InfluxDBResultMapper();
+        List<SensorsPoint> sensorsPointsPointList = resultMapper.toPOJO(queryResult, SensorsPoint.class);
+        return (LinkedList<SensorsPoint>) sensorsPointsPointList;
+    }
+
 }
