@@ -168,12 +168,9 @@ public class SerialPortController implements Runnable, SerialPortEventListener {
                          * add data to a queue for
                          */
 //                        System.out.println(data);
-                        if (OS_NAME.startsWith("windows")) {
-                            // windows
-                            System.out.println(data);
-                        } else if (OS_NAME.startsWith("linux")) {
+                        if (OS_NAME.startsWith("linux")) {
                             // linux
-                        } else if (OS_NAME.startsWith("mac")) {
+                        } else if (OS_NAME.startsWith("mac") || OS_NAME.startsWith("windows")) {
                             /** package for mac os */
 
                             if (data.length() == 16) {
