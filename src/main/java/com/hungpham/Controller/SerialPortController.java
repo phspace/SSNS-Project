@@ -48,6 +48,9 @@ public class SerialPortController implements Runnable, SerialPortEventListener {
         serialData[conn] = new SerialData(conn);
     }
 
+    /**
+     * open connection with serial port and open writing session
+     */
     private void init() {
         String defaultPort = null;
         if (conn == 0) {
@@ -111,10 +114,16 @@ public class SerialPortController implements Runnable, SerialPortEventListener {
         } catch (UnsupportedCommOperationException e) {
             e.printStackTrace();
         }
+        /**
+         * open writing thread
+         */
         writeThread = new Thread(this);
         writeThread.start();
     }
 
+    /**
+     * initialize writing session
+     */
     public void initWrite() {
         try {
             outputStream = serialPort.getOutputStream();
@@ -130,6 +139,10 @@ public class SerialPortController implements Runnable, SerialPortEventListener {
         }
     }
 
+    /**
+     * write message to serial port
+     * @param message
+     */
     public void write(String message) {
         byte[] bytes = utils.stringToHexBytes(message);
         System.out.println("Writing \"" + message + "\" to " + serialPort.getName());
@@ -139,6 +152,10 @@ public class SerialPortController implements Runnable, SerialPortEventListener {
         }
     }
 
+    /**
+     * listen to serial port data
+     * @param event
+     */
     public synchronized void serialEvent(SerialPortEvent event) {
         if (event.getEventType() == SerialPortEvent.DATA_AVAILABLE) {
             try {
@@ -187,6 +204,10 @@ public class SerialPortController implements Runnable, SerialPortEventListener {
         }
     }
 
+    /**
+     * execute a bunch of commands in a file with path
+     * @param path
+     */
     private void executeControlHex(String path) {
         ArrayList<String> strings = utils.readHexFromFile(path);
         for (String s : strings) {
@@ -199,6 +220,9 @@ public class SerialPortController implements Runnable, SerialPortEventListener {
         }
     }
 
+    /**
+     * run writing and controlling serial port thread
+     */
     public void run() {
         initWrite();
         executeControlHex("setup");
