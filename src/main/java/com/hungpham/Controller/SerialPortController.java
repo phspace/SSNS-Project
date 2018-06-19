@@ -27,15 +27,14 @@ public class SerialPortController implements Runnable, SerialPortEventListener {
 
     private static SerialData[] serialData = new SerialData[2];
 
+    public static ArrayList<String> portsList = new ArrayList<>();
+
     public static volatile int mode = 0;
 
     private Thread writeThread;
 
     private String data;
 
-    private String firstPackage = "";
-    private String secondPackage = "";
-    private String thirdPackage = "";
     private String completePackage = "";
 
     private int conn;
@@ -167,6 +166,7 @@ public class SerialPortController implements Runnable, SerialPortEventListener {
                     byte[] readBuffer = new byte[inputStream.available()];
                     inputStream.read(readBuffer);
                     data = utils.bytesToHexString(readBuffer);
+
                     if (mode == 1) {
                         /**
                          * add data to a queue for
@@ -237,7 +237,6 @@ public class SerialPortController implements Runnable, SerialPortEventListener {
             }
         }
         executeControlHex("autoDisconnectHex");
-        //System.exit(0);
         MainApplication.mode = 3;
     }
 
