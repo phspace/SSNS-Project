@@ -23,5 +23,6 @@
     <orderEntry type="library" name="Maven: com.squareup.okhttp3:logging-interceptor:3.10.0" level="project" />
     <orderEntry type="library" name="Maven: org.knowm.xchart:xchart:3.5.2" level="project" />
     <orderEntry type="library" name="Maven: de.erichseifert.vectorgraphics2d:VectorGraphics2D:0.13" level="project" />
+    <orderEntry type="library" name="Maven: org.scream3r:jssc:2.8.0" level="project" />
   </component>
 </module>

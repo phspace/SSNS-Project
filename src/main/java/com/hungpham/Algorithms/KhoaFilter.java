@@ -11,7 +11,7 @@ public class KhoaFilter {
 
     public KhoaFilter() {
         baro_values = new LinkedList<>();
-        fetch = new DatabaseFetch();
+        fetch = new DatabaseFetch(0);
     }
 
     public double[] pullFromDB(long UTVtimestamp) {

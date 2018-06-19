@@ -14,9 +14,11 @@ import java.util.concurrent.TimeUnit;
 
 public class DatabaseConnector {
     private InfluxDB database;
+    private int conn;
 
-    public DatabaseConnector() {
-        database = InfluxDBFactory.connect("http://localhost:8086", "ssns", "ssns-project");
+    public DatabaseConnector(int conn) {
+        this.conn = conn;
+        database = InfluxDBFactory.connect("http://localhost:8086", "ssns" + conn, "ssns");
         verifyDatabase();
     }
 
@@ -27,7 +29,7 @@ public class DatabaseConnector {
             System.out.println("Error pinging server.");
             return;
         }
-        database.setDatabase("ssns");
+        database.setDatabase("ssns" + conn);
     }
 
     public void writeDB(String field, Double data) {
@@ -62,6 +64,14 @@ public class DatabaseConnector {
     public LinkedList<SensorsPoint> readDB(String typeValue, String fromTime, String toTime) {
         String qu = "select " + typeValue + " from ssnsproject where time >= " + fromTime + " and time < " + toTime;
         Query q = new Query(qu, "ssns");
+        QueryResult queryResult = database.query(q);
+        InfluxDBResultMapper resultMapper = new InfluxDBResultMapper();
+        List<SensorsPoint> sensorsPointsPointList = resultMapper.toPOJO(queryResult, SensorsPoint.class);
+        return (LinkedList<SensorsPoint>) sensorsPointsPointList;
+    }
+
+    public LinkedList<SensorsPoint> executeQuery(String query) {
+        Query q = new Query(query, "ssns" + conn);
         QueryResult queryResult = database.query(q);
         InfluxDBResultMapper resultMapper = new InfluxDBResultMapper();
         List<SensorsPoint> sensorsPointsPointList = resultMapper.toPOJO(queryResult, SensorsPoint.class);
