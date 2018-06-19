@@ -1,5 +1,7 @@
 package com.hungpham;
 
+import com.hungpham.Algorithms.AngleChanged;
+import com.hungpham.Algorithms.Khoatest;
 import com.hungpham.Algorithms.ThresholdBased;
 import com.hungpham.Controller.DatabasePush;
 import com.hungpham.Controller.SerialPortController;
@@ -60,9 +62,17 @@ public class FunctionsWrapper {
         }
 
         // run fall detection algorithm
-        ThresholdBased Algorithm1 = new ThresholdBased(10, 0);
+       // ThresholdBased Algorithm1 = new ThresholdBased(10, 0);
+        //Thread Algorithm1Thread = new Thread(Algorithm1);
+       // Algorithm1Thread.start();
+        /*Khoatest Algorithm1 = new Khoatest(3);
         Thread Algorithm1Thread = new Thread(Algorithm1);
-        Algorithm1Thread.start();
+        Algorithm1Thread.start();*/
+
+        AngleChanged Algorithm3 = new AngleChanged(3,0.4);
+        Thread Algorithm3Thread = new Thread(Algorithm3);
+        Algorithm3Thread.start();
+
 
     }
 

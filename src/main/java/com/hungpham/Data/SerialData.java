@@ -189,6 +189,8 @@ public class SerialData implements Runnable {
 
             } catch (InterruptedException e) {
                 e.printStackTrace();
+            } catch (Exception e ){
+
             }
         }
     }
