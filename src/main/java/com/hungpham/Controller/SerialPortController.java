@@ -54,6 +54,7 @@ public class SerialPortController implements Runnable, SerialPortEventListener {
      */
     private void init() {
         String defaultPort = null;
+
         if (conn == 0) {
             if (OS_NAME.startsWith("windows")) {
                 // windows
