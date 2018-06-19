@@ -32,22 +32,22 @@ public class DatabaseFetch {
 
     public LinkedList<SensorsPoint> readBaroInTimeInterval(long UTVtimestamp) {
         valueList.clear();
-        valueList = database.readDB("baro_value", UTVtimestamp+"-3s",UTVtimestamp+"+3s" );
+        valueList = database.readDB("baro_value", UTVtimestamp+"s-3s",UTVtimestamp+"s+3s" );
         return valueList;
     }
     public LinkedList<SensorsPoint> readBaroInFirst2s(long UTVtimestamp ) {
         valueList.clear();
-        valueList = database.readDB("baro_value", UTVtimestamp+"-3s",UTVtimestamp+"-1s" );
+        valueList = database.readDB("baro_value", UTVtimestamp+"s-3s",UTVtimestamp+"s-1s" );
         return valueList;
     }
     public LinkedList<SensorsPoint> readBaroInNext2s(long UTVtimestamp ) {
         valueList.clear();
-        valueList = database.readDB("baro_value", UTVtimestamp+"-1s",UTVtimestamp+"+1s" );
+        valueList = database.readDB("baro_value", UTVtimestamp+"s-1s",UTVtimestamp+"s+1s" );
         return valueList;
     }
     public LinkedList<SensorsPoint> readBaroInLast2s(long UTVtimestamp ) {
         valueList.clear();
-        valueList = database.readDB("baro_value", UTVtimestamp+"+1s",UTVtimestamp+"+3s" );
+        valueList = database.readDB("baro_value", UTVtimestamp+"s+1s",UTVtimestamp+"s+3s" );
         return valueList;
     }
 

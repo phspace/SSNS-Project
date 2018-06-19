@@ -74,7 +74,7 @@ public class SerialData implements Runnable {
                         AcceProcessing.acceQueue[conn].add(acceData);
 //                    System.out.println("Acce:   conn :  " + c + "   :::  " + acceData);
                     } catch (Exception e) {
-                        e.printStackTrace();
+//                        e.printStackTrace();
                     }
                 }
 
@@ -87,7 +87,7 @@ public class SerialData implements Runnable {
                         BaroProcessing.baroQueue[conn].add(baroData);
 //                    System.out.println("Baro:   conn :  " + c + "   :::  " + baroData);
                     } catch (Exception e) {
-                        e.printStackTrace();
+//                        e.printStackTrace();
                     }
 
                 }

@@ -1,5 +1,6 @@
 package com.hungpham;
 
+import com.hungpham.Algorithms.Khoatest;
 import com.hungpham.Algorithms.ThresholdBased;
 import com.hungpham.Controller.DatabasePush;
 import com.hungpham.Controller.SerialPortController;
@@ -61,10 +62,12 @@ System.out.println("Backend functions are starting...");
         }
 
         // run fall detection algorithm
-        ThresholdBased Algorithm1 = new ThresholdBased(10, 0);
+        /*ThresholdBased Algorithm1 = new ThresholdBased(3, 0.4);
+        Thread Algorithm1Thread = new Thread(Algorithm1);
+        Algorithm1Thread.start();*/
+        Khoatest Algorithm1=new Khoatest(3,0.4);
         Thread Algorithm1Thread = new Thread(Algorithm1);
         Algorithm1Thread.start();
-
     }
 
     static class RunSerialController extends Thread {

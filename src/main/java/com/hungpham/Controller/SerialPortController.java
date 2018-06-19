@@ -32,11 +32,14 @@ public class SerialPortController implements Runnable, SerialPortEventListener {
     private Thread writeThread;
 
     private String data;
+    private String[] dataWins;
 
     private String firstPackage = "";
     private String secondPackage = "";
     private String thirdPackage = "";
     private String completePackage = "";
+
+    private int packageConstant = 0;
 
     private int conn;
 
@@ -46,6 +49,7 @@ public class SerialPortController implements Runnable, SerialPortEventListener {
         utils = new Utils();
         init();
         serialData[conn] = new SerialData(conn);
+        dataWins = new String[10];
     }
 
     /**
@@ -141,6 +145,7 @@ public class SerialPortController implements Runnable, SerialPortEventListener {
 
     /**
      * write message to serial port
+     *
      * @param message
      */
     public void write(String message) {
@@ -154,6 +159,7 @@ public class SerialPortController implements Runnable, SerialPortEventListener {
 
     /**
      * listen to serial port data
+     *
      * @param event
      */
     public synchronized void serialEvent(SerialPortEvent event) {
@@ -167,10 +173,22 @@ public class SerialPortController implements Runnable, SerialPortEventListener {
                         /**
                          * add data to a queue for
                          */
-//                        System.out.println(data);
-                        if (OS_NAME.startsWith("linux")) {
+//                        System.out.println("raw package: " + data);
+                        if (OS_NAME.startsWith("windows")) {
+                            dataWins[packageConstant] = data;
+                            packageConstant++;
+                            if (packageConstant == 10) {
+                                for (int i = 0; i < 10; i++) {
+                                    completePackage += dataWins[i];
+                                }
+                                SerialData.dataPackage[conn].add(completePackage);
+                                completePackage = "";
+                                dataWins = new String[10];
+                                packageConstant = 0;
+                            }
+                        } else if (OS_NAME.startsWith("linux")) {
                             // linux
-                        } else if (OS_NAME.startsWith("mac") || OS_NAME.startsWith("windows")) {
+                        } else if (OS_NAME.startsWith("mac")) {
                             /** package for mac os */
 
                             if (data.length() == 16) {
@@ -179,8 +197,10 @@ public class SerialPortController implements Runnable, SerialPortEventListener {
                             if (firstPackage.length() == 16 && data.length() > 16) {
                                 secondPackage = data;
                                 completePackage = firstPackage + secondPackage;
-//                                System.out.println(completePackage);
+//                                System.out.println("complete: " + completePackage);
                                 SerialData.dataPackage[conn].add(completePackage);
+                                firstPackage = "";
+                                secondPackage = "";
                             }
 //                            if ((firstPackage.length() == 16 && secondPackage.length() > 16) && (data.length() == 2 || data.length() == 10)) {
 //                                completePackage = completePackage + data;
@@ -203,6 +223,7 @@ public class SerialPortController implements Runnable, SerialPortEventListener {
 
     /**
      * execute a bunch of commands in a file with path
+     *
      * @param path
      */
     private void executeControlHex(String path) {
