@@ -39,6 +39,8 @@ public class SerialPortController implements Runnable, SerialPortEventListener {
     private String completePackage = "";
 
     private int conn;
+    private String[] dataWins = new String[10];
+    private int packageConstant = 0;
 
     public SerialPortController(int conn) {
         this.conn = conn;
@@ -168,9 +170,23 @@ public class SerialPortController implements Runnable, SerialPortEventListener {
                          * add data to a queue for
                          */
 //                        System.out.println(data);
-                        if (OS_NAME.startsWith("linux")) {
+                        if (OS_NAME.startsWith("windows")) {
+                            // windows
+//                            System.out.println(data);
+                            dataWins[packageConstant] = data;
+                            packageConstant++;
+                            if (packageConstant == 10) {
+                                for (int i = 0; i < 10; i++) {
+                                    completePackage += dataWins[i];
+                                }
+                                SerialData.dataPackage[conn].add(completePackage);
+                                completePackage = "";
+                                dataWins = new String[10];
+                                packageConstant = 0;
+                            }
+                        } else if (OS_NAME.startsWith("linux")) {
                             // linux
-                        } else if (OS_NAME.startsWith("mac") || OS_NAME.startsWith("windows")) {
+                        } else if (OS_NAME.startsWith("mac")) {
                             /** package for mac os */
 
                             if (data.length() == 16) {
@@ -181,11 +197,11 @@ public class SerialPortController implements Runnable, SerialPortEventListener {
                                 completePackage = firstPackage + secondPackage;
 //                                System.out.println(completePackage);
                                 SerialData.dataPackage[conn].add(completePackage);
+                                firstPackage = "";
+                                secondPackage = "";
                             }
 //                            if ((firstPackage.length() == 16 && secondPackage.length() > 16) && (data.length() == 2 || data.length() == 10)) {
 //                                completePackage = completePackage + data;
-//                                firstPackage = "";
-//                                secondPackage = "";
 //                                System.out.println(completePackage);
 //                            }
                         } else {
