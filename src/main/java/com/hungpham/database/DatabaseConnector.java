@@ -63,7 +63,7 @@ public class DatabaseConnector {
 
     public LinkedList<SensorsPoint> readDB(String typeValue, String fromTime, String toTime) {
         String qu = "select " + typeValue + " from ssnsproject where time >= " + fromTime + " and time < " + toTime;
-        Query q = new Query(qu, "ssns");
+        Query q = new Query(qu, "ssns" + conn);
         QueryResult queryResult = database.query(q);
         InfluxDBResultMapper resultMapper = new InfluxDBResultMapper();
         List<SensorsPoint> sensorsPointsPointList = resultMapper.toPOJO(queryResult, SensorsPoint.class);

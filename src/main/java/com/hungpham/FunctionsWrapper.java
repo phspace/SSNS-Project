@@ -60,10 +60,10 @@ public class FunctionsWrapper {
         Thread Algorithm1Thread = new Thread(Algorithm1);
         Algorithm1Thread.start();*/
 
-        AngleChanged Algorithm3 = new AngleChanged(3,0.4);
+        AngleChanged Algorithm3 = new AngleChanged(2.5,0.4);
         Thread Algorithm3Thread = new Thread(Algorithm3);
         Algorithm3Thread.start();
-
+        System.out.println("All functions started.");
 
     }
 
