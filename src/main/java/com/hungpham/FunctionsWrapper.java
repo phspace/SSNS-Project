@@ -65,7 +65,7 @@ System.out.println("Backend functions are starting...");
         /*ThresholdBased Algorithm1 = new ThresholdBased(3, 0.4);
         Thread Algorithm1Thread = new Thread(Algorithm1);
         Algorithm1Thread.start();*/
-        Khoatest Algorithm1=new Khoatest(3,0.4);
+        Khoatest Algorithm1=new Khoatest(2,0.7);
         Thread Algorithm1Thread = new Thread(Algorithm1);
         Algorithm1Thread.start();
     }

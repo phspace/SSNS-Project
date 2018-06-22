@@ -32,7 +32,7 @@ public class Khoatest implements Runnable {
 
     public void fetchAccePointBeforeTimestamp(long timeStamp) {
         //String s = Objects.toString(timeStamp, null);
-        fetch.readAcceInTimeInterval(timeStamp + "s - 2s", timeStamp + "s");
+        fetch.readAcceInTimeInterval(timeStamp + "s - 3s", timeStamp + "s");
     }
 
     public boolean findValueOverUTV() {
@@ -48,6 +48,7 @@ public class Khoatest implements Runnable {
 
     public boolean findValueUnderLTV() {
         for (SensorsPoint a : fetch.getValueList()) {
+            System.out.println(a.getAcce());
             if (a.getAcce() <= LTV) {
                 return true;
             }
@@ -81,13 +82,13 @@ public class Khoatest implements Runnable {
                         }
                         System.out.println("=====================================");
 
-                        double[] middle2s = new double[(int) rawdata.length / 9];
-                        for (int j = 0; j < (int) rawdata.length / 9; j++) {
-                            middle2s[j] = filteredOutput[45 + j];
+                        double[] middle2s = new double[(int) rawdata.length / 7];
+                        for (int j = 0; j < (int) rawdata.length / 7; j++) {
+                            middle2s[j] = filteredOutput[40 + j];
                             System.out.println(middle2s[j]);
                         }
-                        double[] x = new double[(int) rawdata.length / 9];
-                        for (int j = 0; j < (int) rawdata.length / 9; j++) {
+                        double[] x = new double[(int) rawdata.length / 7];
+                        for (int j = 0; j < (int) rawdata.length / 7; j++) {
                             x[j] = j + 1;
                         }
                         System.out.println("=====================================");
@@ -98,7 +99,7 @@ public class Khoatest implements Runnable {
                             System.out.println(last2s[j]);
                         }
                         double[] l = new double[(int) rawdata.length / 3];
-                        for (int j = 0; j < (int) rawdata.length / 9; j++) {
+                        for (int j = 0; j < (int) rawdata.length / 3; j++) {
                             l[j] = j + 1;
                         }
                         System.out.println("=====================================");
@@ -110,18 +111,19 @@ public class Khoatest implements Runnable {
                         System.out.println(slope1);
                         pressureShift = ex.pressureShift(last2s, first2s);
                         System.out.println(pressureShift);
-                        if ((slope>=0.7)&&(abs(slope1)<=0.2)&&(pressureShift>=9)){
+                        if ((slope>=0.5)&&(abs(slope1)<=0.2)&&(pressureShift>=7.5)){
                             System.out.println("************FALL-DETECTED!************");
+                            SerialPortController.mode = 0;
+                            return;
                         }
-                        else if (pressureShift<8){
+                        else if (pressureShift<7.5){
                             System.out.println("not enough change in pressure");
                         }
-                             else if(abs(slope)<0.7) {
+                             else if(abs(slope)<0.5) {
                             System.out.println("not steep middle slope");
                         }
                              else  System.out.println("not stable post-fall slope ");
-                        SerialPortController.mode = 0;
-                        return;
+
                     }
 
                 }

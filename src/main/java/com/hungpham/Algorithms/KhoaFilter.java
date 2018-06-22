@@ -27,7 +27,7 @@ public class KhoaFilter {
         return rawdata;
     }
     public double[] slopeLimit(double[] data) {
-        double slopeLimit = 20; //hPa
+        double slopeLimit = 15; //hPa
         double[] slopeFilteredOutput = new double[data.length];
         for (int j = 0; j < data.length; j++) slopeFilteredOutput[j] = 0;
         for (int i = 0; i < data.length; i++)
