@@ -27,6 +27,8 @@ public class SerialPortController implements Runnable, SerialPortEventListener {
 
     private static SerialData[] serialData = new SerialData[2];
 
+    public static ArrayList<String> portsList = new ArrayList<>();
+
     public static volatile int mode = 0;
 
     private Thread writeThread;
@@ -34,14 +36,13 @@ public class SerialPortController implements Runnable, SerialPortEventListener {
     private String data;
     private String[] dataWins;
 
-    private String firstPackage = "";
-    private String secondPackage = "";
-    private String thirdPackage = "";
     private String completePackage = "";
 
     private int packageConstant = 0;
 
     private int conn;
+    private String[] dataPackage = new String[10];
+    private int packageConstant = 0;
 
     public SerialPortController(int conn) {
         this.conn = conn;
@@ -57,6 +58,7 @@ public class SerialPortController implements Runnable, SerialPortEventListener {
      */
     private void init() {
         String defaultPort = null;
+
         if (conn == 0) {
             if (OS_NAME.startsWith("windows")) {
                 // windows
@@ -81,7 +83,7 @@ public class SerialPortController implements Runnable, SerialPortEventListener {
                 defaultPort = "/dev/ttyS0";
             } else if (OS_NAME.startsWith("mac")) {
                 // mac
-                defaultPort = "/dev/tty.usbmodemL1001651";
+                defaultPort = "/dev/tty.usbmodemL1000621";
                 System.out.println("Launchpad 1 connecting");
             } else {
                 System.out.println("Sorry, your operating system is not supported");
@@ -173,48 +175,20 @@ public class SerialPortController implements Runnable, SerialPortEventListener {
                         /**
                          * add data to a queue for
                          */
-//                        System.out.println("raw package: " + data);
-                        if (OS_NAME.startsWith("windows")) {
-                            dataWins[packageConstant] = data;
-                            packageConstant++;
-                            if (packageConstant == 10) {
-                                for (int i = 0; i < 10; i++) {
-                                    completePackage += dataWins[i];
-                                }
-                                SerialData.dataPackage[conn].add(completePackage);
-                                completePackage = "";
-                                dataWins = new String[10];
-                                packageConstant = 0;
+//                        System.out.println(data);
+                        dataPackage[packageConstant] = data;
+                        packageConstant++;
+                        if (packageConstant == 10) {
+                            for (int i = 0; i < 10; i++) {
+                                completePackage += dataPackage[i];
                             }
-                        } else if (OS_NAME.startsWith("linux")) {
-                            // linux
-                        } else if (OS_NAME.startsWith("mac")) {
-                            /** package for mac os */
-
-                            if (data.length() == 16) {
-                                firstPackage = data;
-                            }
-                            if (firstPackage.length() == 16 && data.length() > 16) {
-                                secondPackage = data;
-                                completePackage = firstPackage + secondPackage;
-//                                System.out.println("complete: " + completePackage);
-                                SerialData.dataPackage[conn].add(completePackage);
-                                firstPackage = "";
-                                secondPackage = "";
-                            }
-//                            if ((firstPackage.length() == 16 && secondPackage.length() > 16) && (data.length() == 2 || data.length() == 10)) {
-//                                completePackage = completePackage + data;
-//                                firstPackage = "";
-//                                secondPackage = "";
-//                                System.out.println(completePackage);
-//                            }
-                        } else {
-                            System.out.println("Sorry, your operating system is not supported");
-                            return;
+                            SerialData.dataPackage[conn].add(completePackage);
+                            completePackage = "";
+                            dataPackage = new String[10];
+                            packageConstant = 0;
                         }
                     }
                 }
-
             } catch (IOException ioe) {
                 System.out.println("Exception " + ioe);
             }
@@ -231,7 +205,7 @@ public class SerialPortController implements Runnable, SerialPortEventListener {
         for (String s : strings) {
             write(s);
             try {
-                Thread.sleep(200);
+                Thread.sleep(500);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -267,7 +241,6 @@ public class SerialPortController implements Runnable, SerialPortEventListener {
             }
         }
         executeControlHex("autoDisconnectHex");
-        //System.exit(0);
         MainApplication.mode = 3;
     }
 

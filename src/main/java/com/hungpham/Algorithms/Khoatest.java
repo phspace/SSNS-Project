@@ -1,4 +1,3 @@
-
 package com.hungpham.Algorithms;
 
 import com.hungpham.Controller.DatabaseFetch;
@@ -38,7 +37,7 @@ public class Khoatest implements Runnable {
     public boolean findValueOverUTV() {
         for (SensorsPoint a : fetch.getValueList()) {
             if (a.getAcce() >= UTV) {
-                Instant time = a.getTime();
+);
                 UTVtimestamp = time.getEpochSecond();
                 return true;
             }
@@ -134,19 +133,3 @@ public class Khoatest implements Runnable {
         }
     }
 }
-
-
-
-
-                     /*   System.out.println("fall detect");
-                        Thread.sleep(4000);
-                        double[] rawdata = khoaFilter.pullFromDB(UTVtimestamp);
-                        double[] filteredOutput = khoaFilter.movingAverage(khoaFilter.slopeLimit(rawdata));
-                        for (double a : rawdata) {
-                            System.out.println(a);
-                        }
-                        System.out.println("=====================================");
-                        for (double a : filteredOutput) {
-                            System.out.println(a);
-                        }*/
-

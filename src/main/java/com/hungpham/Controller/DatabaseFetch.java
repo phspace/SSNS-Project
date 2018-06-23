@@ -27,7 +27,7 @@ public class DatabaseFetch {
     //controller for reading most recent item from now() from database
     public void readAcceMostRecentfromNow(int elapseTime) {
         valueList.clear();
-        valueList = database.readDB("acce_value","(now() - " + elapseTime + "s)", "now()");
+        valueList = database.readDB("acce_value, acc_z, acc_y, acc_x","(now() - " + elapseTime + "s)", "now()");
     }
 
     public LinkedList<SensorsPoint> readBaroInTimeInterval(long UTVtimestamp) {

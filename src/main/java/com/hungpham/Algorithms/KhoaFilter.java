@@ -16,10 +16,11 @@ public class KhoaFilter {
 
     public double[] pullFromDB(long UTVtimestamp) {
         // get barometer values in the most recent 2 seconds
+
         baro_values = fetch.readBaroInTimeInterval(UTVtimestamp);
 
         double[] rawdata = new double[baro_values.size()];
-        int i = 0;
+        int i=0;
         for (SensorsPoint s : baro_values) {
             rawdata[i] = s.getBaro();
             i++;
@@ -57,6 +58,7 @@ public class KhoaFilter {
         for (int i=0; i < 4; i++) Output[data.length-4] = Output[data.length-4] +  (data[i+data.length-4])/4;
         for (int i=0; i < 3; i++) Output[data.length-3] = Output[data.length-3] +  (data[i+data.length-3])/3;
         for (int i=0; i < 2; i++) Output[data.length-2] = Output[data.length-2] +  (data[i+data.length-2])/2;
+
         Output[data.length-1]=data[data.length-1];
         return Output;
     }
