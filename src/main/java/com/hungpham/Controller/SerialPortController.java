@@ -34,8 +34,11 @@ public class SerialPortController implements Runnable, SerialPortEventListener {
     private Thread writeThread;
 
     private String data;
+    private String[] dataWins;
 
     private String completePackage = "";
+
+    private int packageConstant = 0;
 
     private int conn;
     private String[] dataPackage = new String[10];
@@ -47,6 +50,7 @@ public class SerialPortController implements Runnable, SerialPortEventListener {
         utils = new Utils();
         init();
         serialData[conn] = new SerialData(conn);
+        dataWins = new String[10];
     }
 
     /**
@@ -167,7 +171,6 @@ public class SerialPortController implements Runnable, SerialPortEventListener {
                     byte[] readBuffer = new byte[inputStream.available()];
                     inputStream.read(readBuffer);
                     data = utils.bytesToHexString(readBuffer);
-
                     if (mode == 1) {
                         /**
                          * add data to a queue for

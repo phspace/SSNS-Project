@@ -52,13 +52,9 @@ public class FunctionsWrapper {
             pushBaroDB[i].start();
         }
 
-        // run fall detection algorithm
-       // ThresholdBased Algorithm1 = new ThresholdBased(10, 0);
-        //Thread Algorithm1Thread = new Thread(Algorithm1);
-       // Algorithm1Thread.start();
-        /*Khoatest Algorithm1 = new Khoatest(3);
+        Khoatest Algorithm1=new Khoatest(2,0.7);
         Thread Algorithm1Thread = new Thread(Algorithm1);
-        Algorithm1Thread.start();*/
+        Algorithm1Thread.start();
 
         AngleChanged Algorithm3 = new AngleChanged(2.5,0.4);
         Thread Algorithm3Thread = new Thread(Algorithm3);

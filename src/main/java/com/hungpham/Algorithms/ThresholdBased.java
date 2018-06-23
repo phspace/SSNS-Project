@@ -2,11 +2,13 @@
 package com.hungpham.Algorithms;
 
 import com.hungpham.Controller.DatabaseFetch;
+
 import java.time.Instant;
+
 import com.hungpham.Controller.SerialPortController;
 import com.hungpham.database.SensorsPoint;
 
-public class ThresholdBased implements Runnable{
+public class ThresholdBased implements Runnable {
     private DatabaseFetch fetch = new DatabaseFetch(0);
     private volatile boolean shutdown = false;
     private Long UTVtimestamp;
@@ -20,18 +22,18 @@ public class ThresholdBased implements Runnable{
         this.LTV = LTV;
     }
 
-    public void fetchAccePointAtCurrentSystemTime(){
+    public void fetchAccePointAtCurrentSystemTime() {
         fetch.readAcceMostRecentfromNow(2);
     }
 
-    public void fetchAccePointBeforeTimestamp(long timeStamp){
+    public void fetchAccePointBeforeTimestamp(long timeStamp) {
         //String s = Objects.toString(timeStamp, null);
         fetch.readAcceInTimeInterval(timeStamp + "s - 2s", timeStamp + "s");
     }
 
-    public boolean findValueOverUTV(){
+    public boolean findValueOverUTV() {
         for (SensorsPoint a : fetch.getValueList()) {
-            if (a.getAcce() >= UTV)  {
+            if (a.getAcce() >= UTV) {
                 Instant time = a.getTime();
                 UTVtimestamp = time.getEpochSecond();
                 return true;
@@ -40,9 +42,9 @@ public class ThresholdBased implements Runnable{
         return false;
     }
 
-    public boolean findValueUnderLTV(){
+    public boolean findValueUnderLTV() {
         for (SensorsPoint a : fetch.getValueList()) {
-            if (a.getAcce() <= LTV)  {
+            if (a.getAcce() <= LTV) {
                 return true;
             }
         }
@@ -51,21 +53,19 @@ public class ThresholdBased implements Runnable{
 
     public void run() {
         while (true) {
-            try
-            {
+            try {
                 fetchAccePointAtCurrentSystemTime();
-                if(findValueOverUTV())
-                {
+                if (findValueOverUTV()) {
                     fetchAccePointBeforeTimestamp(UTVtimestamp);
-                    if(findValueUnderLTV())
-                    {
+                    if (findValueUnderLTV()) {
                         System.out.println("************FALL-DETECTED!************");
                         SerialPortController.mode = 0;
                         return;
                     }
                 }
                 Thread.sleep(1000);
-            }catch (Exception e) {
+
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
