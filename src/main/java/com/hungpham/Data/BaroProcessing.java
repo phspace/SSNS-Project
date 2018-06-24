@@ -8,13 +8,15 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import static com.hungpham.Controller.DatabasePush.baroDBQueue;
 import static com.hungpham.UI.BaroGraph.baroGraph;
+import static com.hungpham.UI.MainScene.operatingDevicesNumber;
+import static com.hungpham.UI.MainScene.portsList;
 
 public class BaroProcessing implements Runnable {
     private Utils utils;
     private String rawData;
     private double baro;
 
-    public static volatile LinkedBlockingQueue<String>[] baroQueue = new LinkedBlockingQueue[2];
+    public static volatile LinkedBlockingQueue<String>[] baroQueue = new LinkedBlockingQueue[operatingDevicesNumber];
 
     private int conn;
 
@@ -27,8 +29,6 @@ public class BaroProcessing implements Runnable {
 
     private void readRaw() {
         ArrayList<String> hexList = null;
-//        String received = utils.TCPReceive(Definitions.RECEIVING_BAR_VALUE_PORT + conn);
-
         String received = null;
         try {
             received = baroQueue[conn].take();
@@ -62,11 +62,8 @@ public class BaroProcessing implements Runnable {
             if (baro > 120000 || baro < 90000) ;
             else {
                 baroDBQueue[conn].add(b);
-                baroGraph[conn].add(b);
+//                baroGraph[conn].add(b);
             }
-            // utils.TCPSend("localhost", Definitions.GRAPH_BARO_PORT, b);
-//             utils.TCPSend("localhost", Definitions.DATABASE_BARO_PORT + conn, conn + b);
-
         }
     }
 }

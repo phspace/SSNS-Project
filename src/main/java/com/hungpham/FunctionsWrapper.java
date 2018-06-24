@@ -1,15 +1,15 @@
 package com.hungpham;
 
-import com.hungpham.Algorithms.AngleChanged;
-import com.hungpham.Algorithms.Khoatest;
-import com.hungpham.Algorithms.ThresholdBased;
+import com.hungpham.Controller.AlgorithmsController;
+import com.hungpham.Controller.AlgorithmsRunner;
 import com.hungpham.Controller.DatabasePush;
 import com.hungpham.Controller.SerialPortController;
 import com.hungpham.Data.AcceProcessing;
 import com.hungpham.Data.BaroProcessing;
-import jssc.SerialPortList;
+import com.hungpham.UI.MainScene;
 
-import java.io.IOException;
+import static com.hungpham.Controller.AlgorithmsController.voting;
+import static com.hungpham.UI.MainScene.operatingDevicesNumber;
 
 public class FunctionsWrapper {
 
@@ -17,24 +17,45 @@ public class FunctionsWrapper {
     public static void startEverything() {
         // comment to turn off any function
         System.out.println("Backend functions are starting...");
+
+        MainScene mainScene = new MainScene();
+        mainScene.checkPort();
+
+
+        while (MainApplication.mode == 0) ;
+
+        mainScene.checkReadyOperating();
+
         // to run serial port read write
-        RunSerialController t = new RunSerialController();
-        t.start(); // comment this line if not use
+        RunSerialController[] serialControllers = new RunSerialController[operatingDevicesNumber];
 
-        AcceProcessing[] acceProcessings = new AcceProcessing[2];
-        Thread[] acceProcessingThreads = new Thread[2];
+        AcceProcessing[] acceProcessings = new AcceProcessing[operatingDevicesNumber];
+        Thread[] acceProcessingThreads = new Thread[operatingDevicesNumber];
 
-        BaroProcessing[] baroProcessings = new BaroProcessing[2];
-        Thread[] baroProcessingsThread = new Thread[2];
+        BaroProcessing[] baroProcessings = new BaroProcessing[operatingDevicesNumber];
+        Thread[] baroProcessingsThread = new Thread[operatingDevicesNumber];
 
         // write to database
-        DatabasePush[] pushAcce = new DatabasePush[2];
-        Thread[] pushAcceDB = new Thread[2];
+        DatabasePush[] pushAcce = new DatabasePush[operatingDevicesNumber];
+        Thread[] pushAcceDB = new Thread[operatingDevicesNumber];
 
-        DatabasePush[] pushBaro = new DatabasePush[2];
-        Thread[] pushBaroDB = new Thread[2];
+        DatabasePush[] pushBaro = new DatabasePush[operatingDevicesNumber];
+        Thread[] pushBaroDB = new Thread[operatingDevicesNumber];
 
-        for (int i = 0; i < 2; i++) {
+
+        // for running algorithm
+        AlgorithmsController[] ac = new AlgorithmsController[operatingDevicesNumber];
+        Thread[] acThread = new Thread[operatingDevicesNumber];
+
+        AlgorithmsRunner[] ar = new AlgorithmsRunner[operatingDevicesNumber];
+        Thread[] arThread = new Thread[operatingDevicesNumber];
+
+        CheckVoting[] checkVoting = new CheckVoting[operatingDevicesNumber];
+
+        for (int i = 0; i < operatingDevicesNumber; i++) {
+            serialControllers[i] = new RunSerialController(i);
+            serialControllers[i].start();
+
             acceProcessings[i] = new AcceProcessing(i);
             acceProcessingThreads[i] = new Thread(acceProcessings[i]);
             acceProcessingThreads[i].start();
@@ -50,50 +71,53 @@ public class FunctionsWrapper {
             pushBaro[i] = new DatabasePush("baro", i);
             pushBaroDB[i] = new Thread(pushBaro[i]);
             pushBaroDB[i].start();
+
+            ac[i] = new AlgorithmsController(i);
+            acThread[i] = new Thread(ac[i]);
+            acThread[i].start();
+
+            ar[i] = new AlgorithmsRunner(i);
+            arThread[i] = new Thread(ar[i]);
+            arThread[i].start();
+
+            checkVoting[i] = new CheckVoting(i);
+            checkVoting[i].start();
         }
 
-        Khoatest Algorithm1=new Khoatest(2,0.7);
-        Thread Algorithm1Thread = new Thread(Algorithm1);
-        Algorithm1Thread.start();
-
-        AngleChanged Algorithm3 = new AngleChanged(2.5,0.4);
-        Thread Algorithm3Thread = new Thread(Algorithm3);
-        Algorithm3Thread.start();
         System.out.println("All functions started.");
 
     }
 
-    private static void checkPorts() {
-        String[] portNames = SerialPortList.getPortNames();
+    static class RunSerialController extends Thread {
+        private int conn;
+        private SerialPortController serialPortController;
 
-        if (portNames.length == 0) {
-            System.out.println("There are no serial-ports :( You can use an emulator, such ad VSPE, to create a virtual serial port.");
-            System.out.println("Press Enter to exit...");
-            try {
-                System.in.read();
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-            return;
+        public RunSerialController(int conn) {
+            this.conn = conn;
         }
 
-        for (int i = 0; i < portNames.length; i++) {
-            System.out.println(portNames[i]);
+        @Override
+        public void run() {
+            System.out.println("Starting connection with launchpad number " + conn);
+            serialPortController = new SerialPortController(conn);
         }
     }
 
-    static class RunSerialController extends Thread {
+    static class CheckVoting extends Thread {
+        private int conn;
+
+        public CheckVoting(int conn) {
+            this.conn = conn;
+        }
+
         @Override
         public void run() {
-            checkPorts();
-            while (MainApplication.mode == 0) ;
-            if (MainApplication.mode == 1) {
-                SerialPortController c = new SerialPortController(0);
-            } else if (MainApplication.mode == 2) {
-                System.out.println("Start 2 launchpad");
-                SerialPortController c = new SerialPortController(0);
-                SerialPortController c1 = new SerialPortController(1);
+            while (true) {
+                if (voting[conn] == 2) {
+                    MainApplication.command = "stop";
+                    System.out.println("!!!!!!!!!!!!*********** Fall Detected ********!!!!!!!!!!!!");
+                    break;
+                }
             }
         }
     }

@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import static com.hungpham.Controller.Definitions.*;
+import static com.hungpham.UI.MainScene.operatingDevicesNumber;
+import static com.hungpham.UI.MainScene.portsList;
 
 /**
  * This class is made to fetch new data from data queue and notify observers
@@ -19,10 +21,8 @@ public class SerialData implements Runnable {
     private String completePackage;
     private Utils utils;
 
-    public static volatile LinkedBlockingQueue<String>[] dataPackage = new LinkedBlockingQueue[2];
+    public static volatile LinkedBlockingQueue<String>[] dataPackage = new LinkedBlockingQueue[operatingDevicesNumber];
 
-    private String firstPackage;
-    private String secondPackage;
 
     private Thread seperateData;
 
@@ -34,8 +34,6 @@ public class SerialData implements Runnable {
         utils = new Utils();
         rawData = null;
         completePackage = null;
-        firstPackage = "";
-        secondPackage = "";
         seperateData = new Thread(this);
         seperateData.start();
     }

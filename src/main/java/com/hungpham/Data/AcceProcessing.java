@@ -1,7 +1,5 @@
 package com.hungpham.Data;
 
-import com.hungpham.Algorithms.KalmanFilter;
-import com.hungpham.Controller.Definitions;
 import com.hungpham.Utils.Utils;
 
 import java.util.ArrayList;
@@ -9,10 +7,12 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import static com.hungpham.Controller.DatabasePush.acceDBQueue;
 import static com.hungpham.UI.AcceGraph.acceGraph;
+import static com.hungpham.UI.MainScene.operatingDevicesNumber;
+import static com.hungpham.UI.MainScene.portsList;
 
 public class AcceProcessing implements Runnable {
 
-    public static volatile LinkedBlockingQueue<String>[] acceQueue = new LinkedBlockingQueue[2];
+    public static volatile LinkedBlockingQueue<String>[] acceQueue = new LinkedBlockingQueue[operatingDevicesNumber];
 
     private double[] acce;
     private double[] offsets;
@@ -82,7 +82,7 @@ public class AcceProcessing implements Runnable {
         double acceSQRT = Math.sqrt(acce[0] * acce[0] + acce[1] * acce[1] + acce[2] * acce[2]);
         String a = Double.toString(acceSQRT);
         String fullPackage = acce[0] + " " + acce[1] + " " + acce[2] + " " + a;
-        System.out.println("X: " + acce[0] + " Y: " + acce[1] + " Z: " + acce[2]);
+//        System.out.println("X: " + acce[0] + " Y: " + acce[1] + " Z: " + acce[2]);
 //        fullPackage = a;
         acceDBQueue[conn].add(fullPackage);
         acceGraph[conn].add(fullPackage);

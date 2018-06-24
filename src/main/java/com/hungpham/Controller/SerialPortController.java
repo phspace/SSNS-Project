@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.TooManyListenersException;
 
 import static com.hungpham.Controller.Definitions.OS_NAME;
+import static com.hungpham.UI.MainScene.operatingDevicesNumber;
+import static com.hungpham.UI.MainScene.portsList;
 
 /**
  * Main control class for Serial port
@@ -25,9 +27,7 @@ public class SerialPortController implements Runnable, SerialPortEventListener {
     private static CommPortIdentifier portID;
     private Utils utils;
 
-    private static SerialData[] serialData = new SerialData[2];
-
-    public static ArrayList<String> portsList = new ArrayList<>();
+    private static SerialData[] serialData = new SerialData[operatingDevicesNumber];
 
     public static volatile int mode = 0;
 
@@ -42,7 +42,6 @@ public class SerialPortController implements Runnable, SerialPortEventListener {
 
     private int conn;
     private String[] dataPackage = new String[10];
-    private int packageConstant = 0;
 
     public SerialPortController(int conn) {
         this.conn = conn;
@@ -51,6 +50,7 @@ public class SerialPortController implements Runnable, SerialPortEventListener {
         init();
         serialData[conn] = new SerialData(conn);
         dataWins = new String[10];
+        System.out.println("Started connection with launchpad number " + conn);
     }
 
     /**
@@ -58,39 +58,7 @@ public class SerialPortController implements Runnable, SerialPortEventListener {
      */
     private void init() {
         String defaultPort = null;
-
-        if (conn == 0) {
-            if (OS_NAME.startsWith("windows")) {
-                // windows
-                defaultPort = "COM3";
-            } else if (OS_NAME.startsWith("linux")) {
-                // linux
-                defaultPort = "/dev/ttyS0";
-            } else if (OS_NAME.startsWith("mac")) {
-                // mac
-                System.out.println("Launchpad 0 connecting");
-                defaultPort = "/dev/tty.usbmodemL1000051";
-            } else {
-                System.out.println("Sorry, your operating system is not supported");
-                return;
-            }
-        } else if (conn == 1) {
-            if (OS_NAME.startsWith("windows")) {
-                // windows
-                defaultPort = "COM3";
-            } else if (OS_NAME.startsWith("linux")) {
-                // linux
-                defaultPort = "/dev/ttyS0";
-            } else if (OS_NAME.startsWith("mac")) {
-                // mac
-                defaultPort = "/dev/tty.usbmodemL1000621";
-                System.out.println("Launchpad 1 connecting");
-            } else {
-                System.out.println("Sorry, your operating system is not supported");
-                return;
-            }
-        }
-
+        defaultPort = portsList.get(conn);
         try {
             portID = CommPortIdentifier.getPortIdentifier(defaultPort);
             System.out.println("Serial port: " + portID.getName());

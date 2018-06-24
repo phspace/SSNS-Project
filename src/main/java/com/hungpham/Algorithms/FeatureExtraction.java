@@ -47,11 +47,16 @@ public class FeatureExtraction {
         return slope;
     }
     public double pressureShift (double[] x, double[] y){
-        double sumX=0, sumY=0;
-        double result;
-        for (int i=0; i<x.length; i++) sumX=sumX+x[i];
-        for (int i=0; i<y.length; i++) sumY=sumY+y[i];
-        result =abs((sumY/y.length)-(sumX/x.length));
+        double result = 0;
+        try {
+            double sumX=0, sumY=0;
+            for (int i=0; i<x.length; i++) sumX=sumX+x[i];
+            for (int i=0; i<y.length; i++) sumY=sumY+y[i];
+            result =abs((sumY/y.length)-(sumX/x.length));
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
         return result;
     }
 

@@ -19,7 +19,8 @@ public class DatabaseConnector {
     public DatabaseConnector(int conn) {
         this.conn = conn;
         database = InfluxDBFactory.connect("http://localhost:8086", "ssns" + conn, "ssns");
-        verifyDatabase();
+        database.setDatabase("ssns" + conn);
+//        verifyDatabase();
     }
 
     private void verifyDatabase() {

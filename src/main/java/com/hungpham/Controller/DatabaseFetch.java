@@ -12,6 +12,7 @@ public class DatabaseFetch {
 
     /**
      * when create new object of this class, remember to choose the database 0 or 1
+     *
      * @param conn
      */
     public DatabaseFetch(int conn) {
@@ -27,27 +28,12 @@ public class DatabaseFetch {
     //controller for reading most recent item from now() from database
     public void readAcceMostRecentfromNow(int elapseTime) {
         valueList.clear();
-        valueList = database.readDB("acce_value, acc_z, acc_y, acc_x","(now() - " + elapseTime + "s)", "now()");
+        valueList = database.readDB("acce_value, acc_z, acc_y, acc_x", "(now() - " + elapseTime + "s)", "now()");
     }
 
-    public LinkedList<SensorsPoint> readBaroInTimeInterval(long UTVtimestamp) {
+    public LinkedList<SensorsPoint> readBaroInTimeInterval(long timeStamp) {
         valueList.clear();
-        valueList = database.readDB("baro_value", UTVtimestamp+"s-3s",UTVtimestamp+"s+3s" );
-        return valueList;
-    }
-    public LinkedList<SensorsPoint> readBaroInFirst2s(long UTVtimestamp ) {
-        valueList.clear();
-        valueList = database.readDB("baro_value", UTVtimestamp+"s-3s",UTVtimestamp+"s-1s" );
-        return valueList;
-    }
-    public LinkedList<SensorsPoint> readBaroInNext2s(long UTVtimestamp ) {
-        valueList.clear();
-        valueList = database.readDB("baro_value", UTVtimestamp+"s-1s",UTVtimestamp+"s+1s" );
-        return valueList;
-    }
-    public LinkedList<SensorsPoint> readBaroInLast2s(long UTVtimestamp ) {
-        valueList.clear();
-        valueList = database.readDB("baro_value", UTVtimestamp+"s+1s",UTVtimestamp+"s+3s" );
+        valueList = database.readDB("baro_value", timeStamp + "ms-6000ms", timeStamp + "ms");
         return valueList;
     }
 

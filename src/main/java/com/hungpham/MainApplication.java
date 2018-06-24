@@ -14,7 +14,7 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
-public class MainApplication extends Application {
+public class MainApplication extends Application implements Runnable {
     public static volatile String command = "";
     public static volatile int mode = 0;
 
@@ -105,11 +105,34 @@ public class MainApplication extends Application {
     }
 
     public static void main(String[] args) {
-        FunctionsWrapper.startEverything();
+        RunBackground runBackground = new RunBackground();
+        runBackground.start();
+        System.out.println("GUI starting.");
         launch(args);
-        System.out.println("GUI started.");
-
         while (mode != 3);
         System.exit(0);
+    }
+
+    /**
+     * When an object implementing interface <code>Runnable</code> is used
+     * to create a thread, starting the thread causes the object's
+     * <code>run</code> method to be called in that separately executing
+     * thread.
+     * <p>
+     * The general contract of the method <code>run</code> is that it may
+     * take any action whatsoever.
+     *
+     * @see Thread#run()
+     */
+    @Override
+    public void run() {
+        FunctionsWrapper.startEverything();
+    }
+
+    static class RunBackground extends Thread {
+        @Override
+        public void run() {
+            FunctionsWrapper.startEverything();
+        }
     }
 }

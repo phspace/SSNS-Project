@@ -5,17 +5,20 @@ import com.hungpham.database.DatabaseConnector;
 
 import java.util.concurrent.LinkedBlockingQueue;
 
+import static com.hungpham.UI.MainScene.operatingDevicesNumber;
+import static com.hungpham.UI.MainScene.portsList;
+
 public class DatabasePush implements Runnable {
     private Utils utils;
     private String data;
     private int conn;
-    private static DatabaseConnector[] databaseConnector = new DatabaseConnector[2];
+    private static DatabaseConnector[] databaseConnector = new DatabaseConnector[operatingDevicesNumber];
     private String dest;
     private int port;
 
     // queues for
-    public static volatile LinkedBlockingQueue<String>[] acceDBQueue = new LinkedBlockingQueue[2];
-    public static volatile LinkedBlockingQueue<String>[] baroDBQueue = new LinkedBlockingQueue[2];
+    public static volatile LinkedBlockingQueue<String>[] acceDBQueue = new LinkedBlockingQueue[operatingDevicesNumber];
+    public static volatile LinkedBlockingQueue<String>[] baroDBQueue = new LinkedBlockingQueue[operatingDevicesNumber];
 
     public DatabasePush(String dest, int conn) {
         this.conn = conn;
