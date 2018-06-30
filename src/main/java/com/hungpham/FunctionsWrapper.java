@@ -7,9 +7,27 @@ import com.hungpham.Controller.SerialPortController;
 import com.hungpham.Data.AcceProcessing;
 import com.hungpham.Data.BaroProcessing;
 import com.hungpham.UI.MainScene;
+import javafx.application.Platform;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.stage.Stage;
+import sun.audio.AudioPlayer;
+import sun.audio.AudioStream;
+
+import javax.swing.*;
+import java.awt.*;
+import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import static com.hungpham.Controller.AlgorithmsController.voting;
+import static com.hungpham.Main.mainStage;
+import static com.hungpham.StaticControlVariables.serialCommands;
 import static com.hungpham.UI.MainScene.operatingDevicesNumber;
+import static com.hungpham.UI.MainScene.portsList;
 
 public class FunctionsWrapper {
 
@@ -17,17 +35,6 @@ public class FunctionsWrapper {
     public static void startEverything() {
         // comment to turn off any function
         System.out.println("Backend functions are starting...");
-
-        MainScene mainScene = new MainScene();
-        mainScene.checkPort();
-
-
-        while (MainApplication.mode == 0) ;
-
-        mainScene.checkReadyOperating();
-
-        // to run serial port read write
-        RunSerialController[] serialControllers = new RunSerialController[operatingDevicesNumber];
 
         AcceProcessing[] acceProcessings = new AcceProcessing[operatingDevicesNumber];
         Thread[] acceProcessingThreads = new Thread[operatingDevicesNumber];
@@ -53,8 +60,6 @@ public class FunctionsWrapper {
         CheckVoting[] checkVoting = new CheckVoting[operatingDevicesNumber];
 
         for (int i = 0; i < operatingDevicesNumber; i++) {
-            serialControllers[i] = new RunSerialController(i);
-            serialControllers[i].start();
 
             acceProcessings[i] = new AcceProcessing(i);
             acceProcessingThreads[i] = new Thread(acceProcessings[i]);
@@ -82,25 +87,12 @@ public class FunctionsWrapper {
 
             checkVoting[i] = new CheckVoting(i);
             checkVoting[i].start();
+
+            System.out.println("Start number " + i);
         }
 
         System.out.println("All functions started.");
 
-    }
-
-    static class RunSerialController extends Thread {
-        private int conn;
-        private SerialPortController serialPortController;
-
-        public RunSerialController(int conn) {
-            this.conn = conn;
-        }
-
-        @Override
-        public void run() {
-            System.out.println("Starting connection with launchpad number " + conn);
-            serialPortController = new SerialPortController(conn);
-        }
     }
 
     static class CheckVoting extends Thread {
@@ -114,8 +106,20 @@ public class FunctionsWrapper {
         public void run() {
             while (true) {
                 if (voting[conn] == 2) {
-                    MainApplication.command = "stop";
+                    GraphStage.command = "stop";
                     System.out.println("!!!!!!!!!!!!*********** Fall Detected ********!!!!!!!!!!!!");
+                    for (int i = 0; i < portsList.size(); i++) {
+                        serialCommands[i].add("010AFE03000013");
+                    }
+
+                    String bip = "fall1.m4a";
+                    Media hit = new Media(new File(bip).toURI().toString());
+                    MediaPlayer mediaPlayer = new MediaPlayer(hit);
+                    mediaPlayer.play();
+                    JOptionPane.showMessageDialog(new Frame(),
+                            "*!*!*!*!*!*!*! Fall Detected *!*!*!*!*!*!*!");
+                    Platform.exit();
+                    System.exit(0);
                     break;
                 }
             }

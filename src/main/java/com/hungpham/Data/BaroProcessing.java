@@ -1,15 +1,12 @@
 package com.hungpham.Data;
 
-import com.hungpham.Controller.Definitions;
 import com.hungpham.Utils.Utils;
 
 import java.util.ArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import static com.hungpham.Controller.DatabasePush.baroDBQueue;
-import static com.hungpham.UI.BaroGraph.baroGraph;
 import static com.hungpham.UI.MainScene.operatingDevicesNumber;
-import static com.hungpham.UI.MainScene.portsList;
 
 public class BaroProcessing implements Runnable {
     private Utils utils;

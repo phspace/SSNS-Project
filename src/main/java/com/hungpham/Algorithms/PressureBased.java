@@ -87,7 +87,7 @@ public class PressureBased implements Runnable {
 //            else System.out.println("not stable post-fall slope ");
 
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
         }
     }
 }

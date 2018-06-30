@@ -1,7 +1,7 @@
 package com.hungpham.Controller;
 
 import com.hungpham.Data.SerialData;
-import com.hungpham.MainApplication;
+import com.hungpham.GraphStage;
 import com.hungpham.Utils.Utils;
 import gnu.io.*;
 
@@ -11,9 +11,10 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.TooManyListenersException;
 
-import static com.hungpham.Controller.Definitions.OS_NAME;
+import static com.hungpham.StaticControlVariables.serialCommands;
 import static com.hungpham.UI.MainScene.operatingDevicesNumber;
 import static com.hungpham.UI.MainScene.portsList;
+import static com.hungpham.UI.MainScene.stkMacSet;
 
 /**
  * Main control class for Serial port
@@ -34,7 +35,6 @@ public class SerialPortController implements Runnable, SerialPortEventListener {
     private Thread writeThread;
 
     private String data;
-    private String[] dataWins;
 
     private String completePackage = "";
 
@@ -49,7 +49,6 @@ public class SerialPortController implements Runnable, SerialPortEventListener {
         utils = new Utils();
         init();
         serialData[conn] = new SerialData(conn);
-        dataWins = new String[10];
         System.out.println("Started connection with launchpad number " + conn);
     }
 
@@ -139,6 +138,14 @@ public class SerialPortController implements Runnable, SerialPortEventListener {
                     byte[] readBuffer = new byte[inputStream.available()];
                     inputStream.read(readBuffer);
                     data = utils.bytesToHexString(readBuffer);
+//                    System.out.println(data);
+                    if (mode == 0) {
+                        System.out.println("conn: " + conn + "  " + data);
+                        if (data.contains("0E6C54")) {
+                            String stkMac = data.substring(data.indexOf("0E6C54") - 6, data.indexOf("0E6C54") + 6);
+                            stkMacSet.add(stkMac);
+                        }
+                    }
                     if (mode == 1) {
                         /**
                          * add data to a queue for
@@ -180,13 +187,28 @@ public class SerialPortController implements Runnable, SerialPortEventListener {
         }
     }
 
+    public SerialPort getSerialPort() {
+        return serialPort;
+    }
+
     /**
      * run writing and controlling serial port thread
      */
     public void run() {
         initWrite();
+        while (true) {
+            try {
+                write(serialCommands[conn].take());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+//        autoRun();
+    }
+
+    private void autoRun() {
         executeControlHex("setup");
-        while (MainApplication.mode == 0) ;
+        while (GraphStage.mode == 0) ;
         if (conn == 0) {
             System.out.println("Connecting to sensortag 0");
             executeControlHex("connect1");
@@ -203,13 +225,13 @@ public class SerialPortController implements Runnable, SerialPortEventListener {
         }
         mode = 1;
         while (true) {
-            if (MainApplication.command.equalsIgnoreCase("stop") || mode == 0) {
+            if (GraphStage.command.equalsIgnoreCase("stop") || mode == 0) {
                 mode = 0;
                 break;
             }
         }
         executeControlHex("autoDisconnectHex");
-        MainApplication.mode = 3;
+        GraphStage.mode = 3;
     }
 
 }

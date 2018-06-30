@@ -6,9 +6,8 @@ import java.util.ArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import static com.hungpham.Controller.DatabasePush.acceDBQueue;
-import static com.hungpham.UI.AcceGraph.acceGraph;
+import static com.hungpham.UI.graphs.AcceGraph.acceGraph;
 import static com.hungpham.UI.MainScene.operatingDevicesNumber;
-import static com.hungpham.UI.MainScene.portsList;
 
 public class AcceProcessing implements Runnable {
 

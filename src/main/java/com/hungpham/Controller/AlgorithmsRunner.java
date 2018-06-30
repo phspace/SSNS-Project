@@ -1,6 +1,6 @@
 package com.hungpham.Controller;
 
-import com.hungpham.MainApplication;
+import com.hungpham.GraphStage;
 
 public class AlgorithmsRunner implements Runnable{
 
@@ -29,7 +29,7 @@ public class AlgorithmsRunner implements Runnable{
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        while (!(MainApplication.command.equalsIgnoreCase("stop"))) {
+        while (!(GraphStage.command.equalsIgnoreCase("stop"))) {
             try {
                 Runnable task = AlgorithmsController.algorithmsQueue[conn].take();
                 task.run();

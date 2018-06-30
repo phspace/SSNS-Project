@@ -1,18 +1,18 @@
 package com.hungpham.UI;
 
-import com.hungpham.MainApplication;
+import com.hungpham.GraphStage;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import jssc.SerialPortList;
 
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class MainScene extends Application {
-    public static ArrayList<String> portsList = new ArrayList<>();
+    public static volatile ArrayList<String> portsList = new ArrayList<>();
 
     public static int operatingDevicesNumber = 0;
-    private ArrayList<String> stkMacList = new ArrayList<>();
+    public static volatile HashSet<String> stkMacSet = new HashSet<>();
 
 
 
@@ -40,15 +40,7 @@ public class MainScene extends Application {
         String[] portNames = SerialPortList.getPortNames();
 
         if (portNames.length == 0) {
-            System.out.println("There are no serial-ports :( You can use an emulator, such ad VSPE, to create a virtual serial port.");
-            System.out.println("Press Enter to exit...");
-            try {
-                System.in.read();
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-            return;
+            System.out.println("There are no serial-ports.");
         }
 
         for (int i = 0; i < portNames.length; i++) {
@@ -61,7 +53,7 @@ public class MainScene extends Application {
     }
 
     public void checkReadyOperating() {
-        operatingDevicesNumber = MainApplication.mode;
+        operatingDevicesNumber = GraphStage.mode;
     }
 
 }

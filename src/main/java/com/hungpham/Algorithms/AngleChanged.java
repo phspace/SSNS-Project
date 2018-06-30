@@ -44,10 +44,9 @@ public class AngleChanged extends ThresholeBased implements Runnable {
                     if (findValueOfAngleChange() && voting[conn] != 2) {
                         System.out.println("********* Angle change detected *********");
                         voting[conn] = 1;
-                    } else if (voting[conn] == 2) ;
-                    else voting[conn] = 0;
+                    }
                 }
-            }
+            } else voting[conn] = 0;
         } catch (Exception e) {
             e.printStackTrace();
         }

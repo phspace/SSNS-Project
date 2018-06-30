@@ -1,16 +1,11 @@
 package com.hungpham.Data;
 
-import com.hungpham.Controller.Definitions;
-import com.hungpham.MainApplication;
 import com.hungpham.Utils.Utils;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import static com.hungpham.Controller.Definitions.*;
 import static com.hungpham.UI.MainScene.operatingDevicesNumber;
-import static com.hungpham.UI.MainScene.portsList;
 
 /**
  * This class is made to fetch new data from data queue and notify observers

@@ -2,12 +2,11 @@ package com.hungpham.Controller;
 
 import com.hungpham.Algorithms.AngleChanged;
 import com.hungpham.Algorithms.PressureBased;
-import com.hungpham.MainApplication;
+import com.hungpham.GraphStage;
 
 import java.util.concurrent.LinkedBlockingQueue;
 
 import static com.hungpham.UI.MainScene.operatingDevicesNumber;
-import static com.hungpham.UI.MainScene.portsList;
 
 public class AlgorithmsController implements Runnable {
     private int conn;
@@ -26,7 +25,7 @@ public class AlgorithmsController implements Runnable {
         while (SerialPortController.mode != 1) ;
         try {
             Thread.sleep(10000);
-            while (!(MainApplication.command.equalsIgnoreCase("stop"))) {
+            while (!(GraphStage.command.equalsIgnoreCase("stop"))) {
                 pressureBased = new PressureBased(conn);
                 Algorithm3 = new AngleChanged(conn, 2.5, 0.4);
                 algorithmsQueue[conn].add(Algorithm3);

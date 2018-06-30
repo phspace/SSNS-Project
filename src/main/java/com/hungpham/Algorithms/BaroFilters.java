@@ -5,7 +5,7 @@ import com.hungpham.database.SensorsPoint;
 
 import java.util.LinkedList;
 
-import static com.hungpham.UI.BaroGraph.baroGraph;
+import static com.hungpham.UI.graphs.BaroGraph.baroGraph;
 
 public class BaroFilters {
     private DatabaseFetch fetch;
